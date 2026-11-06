@@ -185,6 +185,16 @@ uv run bl sessions delete 会话ID
 使用 Brain-Leader 时不得同时运行同库的 ka/iqb chat、ingest、sync、seed 等操作。**
 首版没有多用户、后台爬虫、自动投递、招聘消息、语音和 Web。
 
+## 每日一题
+
+`bl daily` 提供独立的 AI Agent 技术学习题、逐项答案来源、细分领域和联网筛选的相关文章，
+通过指定飞书机器人向账号邮箱发送，不读取职业会话或个人材料。
+使用飞书 Card 2.0 分层展示，延伸阅读最多三篇。工作日北京时间 11:00 运行，
+仅从 RAG、LangChain、Harness engineering、Claude Code底层实现、Multi-Agent 五类选题，
+每周持久化随机安排顺序，同一大类一周最多推送一次。
+具备来源核验、内容边界检查和持久发送去重。
+私有配置、命令、定时运行条件与故障处理见 [DAILY.md](DAILY.md)。
+
 ## LangSmith 调用链
 
 默认关闭，不依赖全局 `LANGSMITH_*` 开关。不需要 FastAPI 或将助手改成 HTTP 服务。

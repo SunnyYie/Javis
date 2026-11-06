@@ -12,6 +12,7 @@ from rich.prompt import Confirm
 
 from .agent import chat_turn
 from .config import Settings
+from .daily_cli import app as daily_app
 from .models import BrainError, Probe, ToolResult, private
 from .service import Service
 from .storage import Store
@@ -19,6 +20,7 @@ from .storage import Store
 app = typer.Typer(no_args_is_help=True, pretty_exceptions_enable=False)
 sessions = typer.Typer(no_args_is_help=True)
 app.add_typer(sessions, name="sessions")
+app.add_typer(daily_app, name="daily")
 console = Console(markup=False, highlight=False, soft_wrap=True)
 errors = Console(stderr=True, markup=False, highlight=False, soft_wrap=True)
 Session = Annotated[str | None, typer.Option("--session", "-s")]

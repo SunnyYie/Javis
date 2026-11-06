@@ -11,6 +11,7 @@ dependencies = [
   "python-docx>=1.1,<2", "reportlab>=4,<5", "filelock>=3.16,<4",
   "fonttools>=4.60,<5",
   "langsmith>=0.14.17,<0.15",
+  "httpx>=0.28,<1",
 ]
 
 [tool.uv.sources]

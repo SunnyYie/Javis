@@ -109,6 +109,35 @@ class Assistants:
 
         return self._worker.submit(copy_context().run, invoke).result()
 
+    def daily_evidence(self, query):
+        """Read existing technical evidence only; never acquire or save an answer."""
+        def invoke():
+            from langsmith import tracing_context
+
+            with tracing_context(enabled=False):
+                child = self._assistant("knowledge")
+                before = (child.store.corpus_id, child.store.version)
+                chunks = child.knowledge.retrieve(query)
+                if before != (child.store.corpus_id, child.store.version):
+                    raise RuntimeError("daily_corpus_changed")
+                return {
+                    "corpus_id": before[0], "version": before[1],
+                    "chunks": [chunk.to_dict() for chunk in chunks],
+                }
+
+        return self._worker.submit(copy_context().run, invoke).result()
+
+    def daily_articles(self, query):
+        def invoke():
+            from langsmith import tracing_context
+
+            from .web_reading import search_articles
+
+            with tracing_context(enabled=False):
+                return search_articles(self.knowledge_settings("knowledge"), query)
+
+        return self._worker.submit(copy_context().run, invoke).result()
+
     def close(self):
         if self._closed:
             return

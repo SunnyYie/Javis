@@ -765,6 +765,7 @@ source = { editable = "../tools" }
 dependencies = [
     { name = "filelock" },
     { name = "fonttools" },
+    { name = "httpx" },
     { name = "interview-question-bank" },
     { name = "job-agent" },
     { name = "knowledge-assistant" },
@@ -777,6 +778,7 @@ dependencies = [
 requires-dist = [
     { name = "filelock", specifier = ">=3.16,<4" },
     { name = "fonttools", specifier = ">=4.60,<5" },
+    { name = "httpx", specifier = ">=0.28,<1" },
     { name = "interview-question-bank", editable = "../agents/Interview-Question-Bank" },
     { name = "job-agent", editable = "../agents/Job-Agent" },
     { name = "knowledge-assistant", editable = "../agents/Knowledge-Assistant" },

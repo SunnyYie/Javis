@@ -24,7 +24,10 @@
 | 模拟面试与复盘 | 主应用冻结题目及评分规则，逐题推进，明确结束后开放分析 |
 | 长期记忆 | 事实、偏好、薄弱项先成为候选，经用户确认后跨会话使用 |
 
-不负责 Web、语音、自动投递、招聘消息、后台任务、多用户或多平台招聘采集。
+不负责 Web、语音、自动投递、招聘消息、多用户或多平台招聘采集。
+`bl daily` 是新增的独立技术学习推送入口，由外部受管调度触发一次性运行，
+不提供常驻后台服务；不能读取职业会话、绕过敏感内容检查或自行扩大收件范围。
+边界、发送幂等及验收见 [DAILY.md](DAILY.md)。
 不验证履历真实性，不推断面试官真实意图，不预测录用结果。
 
 ## 2. 架构与目录
@@ -43,10 +46,15 @@
 | `src/brain_leader/storage.py` | 会话、记录、事件、关联及长期记忆 |
 | `src/brain_leader/models.py` | 严格结构、统一结果、错误与脱敏规则 |
 | `src/brain_leader/config.py`、`llm.py` | 显式配置、模型构造与结构化输出校验 |
+| `src/brain_leader/daily.py`、`daily_cli.py` | 独立技术每日题、引用核验及持久发送状态 |
+| `src/brain_leader/daily_card.py`、`daily_reading.py` | Card 2.0 层级、逐项来源、联网文章筛选 |
+| `src/brain_leader/daily_topics.py` | 五类每周持久随机排期、每周类别去重及公开机制范围 |
 | `../tools/src/javis_tools/adapters.py` | 三个助手的服务适配及知识助手线程所有权 |
 | `../tools/src/javis_tools/documents.py` | 同源 Markdown、DOCX、PDF 排版与字体嵌入 |
 | `../tools/src/javis_tools/isolation.py` | 真实验收的语料隔离副本与命名空间 |
 | `../tools/src/javis_tools/tracing.py` | 默认关闭的 metadata-only LangSmith 及本地链路 |
+| `../tools/src/javis_tools/feishu.py` | 固定飞书端点、内存 token、有界且不自动重试的消息投递 |
+| `../tools/src/javis_tools/web_reading.py` | 复用搜索配置，有限且安全地读取公开文章，不写共享库 |
 | `../skills/*/SKILL.md` | profile、resume、jobs、prepare、interview、review 六类流程 |
 | `data/`、`../memory/` | 私有运行状态与项目自身的跨会话记忆 |
 

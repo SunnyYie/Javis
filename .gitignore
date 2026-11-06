@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.daily.example
 !.env.template
 .envrc
 *.pem

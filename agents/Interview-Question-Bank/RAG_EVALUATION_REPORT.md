@@ -133,7 +133,10 @@ ReAct 重排结果虽然没有命中手工指定的 GitHub 金标片段，但实
 
 ## 证据
 
-最终通过目录：`data/evaluations/hybrid-rerank-20261105-02/`。首轮失败与独立重评目录：`data/evaluations/hybrid-rerank-20261105-01/`。
+历史最终通过目录：`data/evaluations/hybrid-rerank-20261105-02/`。历史首轮失败与独立重评目录：`data/evaluations/hybrid-rerank-20261105-01/`。
+2026-11-06 清理后，仅保留最终通过目录中的 `samples.json`、`dataset.json`、
+`environment.json` 作为重新评分必需的小型样例；失败目录、命令输出及评分日志已删除。
+下列清单描述原运行输出，不表示这些文件仍然存在；本报告的失败结论和历史指标不变。
 
 - `environment.json`、`dataset.json`：模型、索引、来源版本和数据集哈希。
 - `commands.jsonl`、各次 `.stdout` / `.stderr`：实际 CLI 命令、退出码、耗时、结构化答案及引用。
