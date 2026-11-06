@@ -1,0 +1,12 @@
+[
+  {"question": "AgentGuide 对 Agent 工具调用和任务规划有哪些解释？", "repos": ["adongwanai/AgentGuide"]},
+  {"question": "claude-code-analysis 分析了哪些执行循环机制？", "repos": ["liuup/claude-code-analysis"], "role": "third_party"},
+  {"question": "codex-source-analysis 中如何解释上下文管理？", "repos": ["xiaonancs/codex-source-analysis"], "role": "third_party"},
+  {"question": "ZCode 的安装入口和运行要求是什么？", "repos": ["zai-org/ZCode"]},
+  {"question": "What are the main components of deepseek-harness?", "repos": ["deepseek-ai/deepseek-harness"]},
+  {"question": "pi 和 larkway 分别面向什么用途？", "repos": ["earendil-works/pi", "chuckwu0/larkway"]},
+  {"question": "LangChain 的 tool calling 接口如何使用？请给出有来源的示例。", "repos": ["langchain-ai/langchain"]},
+  {"question": "all-in-rag 中如何组织检索、重排与生成？", "repos": ["datawhalechina/all-in-rag"]},
+  {"question": "Milvus 与 Redis 在这个助手里各自保存什么？请区分项目本地设计与上游项目事实。", "repos": ["milvus-io/milvus"]},
+  {"question": "What is vLLM's OpenAI-compatible serving interface?", "repos": ["vllm-project/vllm"]}
+]

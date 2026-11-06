@@ -1,0 +1,38 @@
+[
+  {
+    "id": "holdout-milvus",
+    "question": "根据 milvus-io/milvus 的 README，Milvus 用什么语言实现，支持什么硬件加速？分布式之外有哪些本地部署形态？",
+    "reference": "Milvus 是用于组织与搜索大规模非结构化数据的向量数据库，使用 Go 和 C++ 实现，支持 CPU/GPU 硬件加速。它是分布式、Kubernetes-native 架构，也提供单机 Standalone 和适合 Python 快速上手的轻量 Milvus Lite。",
+    "evidence": [
+      {"source": "https://github.com/milvus-io/milvus", "path": "README.md", "contains": "Written in Go and C++"},
+      {"source": "https://github.com/milvus-io/milvus", "path": "README.md", "contains": "Standalone mode"}
+    ]
+  },
+  {
+    "id": "holdout-vllm",
+    "question": "According to the vllm-project/vllm README, how does vLLM optimize attention memory and request batching, and which API server protocols does it expose?",
+    "reference": "vLLM is a library for LLM inference and serving. Its listed optimizations include PagedAttention for attention key/value memory, continuous batching, chunked prefill, and prefix caching. The README lists an OpenAI-compatible API server, Anthropic Messages API, and gRPC support.",
+    "evidence": [
+      {"source": "https://github.com/vllm-project/vllm", "path": "README.md", "contains": "PagedAttention"},
+      {"source": "https://github.com/vllm-project/vllm", "path": "README.md", "contains": "Anthropic Messages API"}
+    ]
+  },
+  {
+    "id": "holdout-pi",
+    "question": "earendil-works/pi 的 README 如何定义 Pi？要求最低哪个 Node.js 版本？除交互式终端外还有哪些使用接口？",
+    "reference": "Pi 自述为 minimal, extensible agent harness，可用 extensions、skills、prompt templates、themes 定制。要求 Node.js 22.19 或更新版本；除交互使用外支持 print 或 JSON 模式自动化、RPC 控制和 Pi TypeScript SDK 应用集成。",
+    "evidence": [
+      {"source": "https://github.com/earendil-works/pi", "path": "README.md", "contains": "minimal, extensible agent harness"},
+      {"source": "https://github.com/earendil-works/pi", "path": "README.md", "contains": "Node.js 22.19"}
+    ]
+  },
+  {
+    "id": "holdout-storage-serving",
+    "question": "根据 milvus-io/milvus 和 vllm-project/vllm 的已入库 README，对比两者在 AI 系统中的职责：哪一个侧重向量数据检索，哪一个侧重大模型推理服务？只说原文支持的定位。",
+    "reference": "Milvus 是高性能、可扩展的向量数据库，组织与检索文本、图像、多模态等非结构化数据。vLLM 是快速易用的 LLM 推理与 serving 库，优化推理吞吐和注意力内存，提供 API 服务。两者的 README 定位分别侧重数据检索和模型推理服务。",
+    "evidence": [
+      {"source": "https://github.com/milvus-io/milvus", "path": "README.md", "contains": "high-performance vector database"},
+      {"source": "https://github.com/vllm-project/vllm", "path": "README.md", "contains": "library for LLM inference and serving"}
+    ]
+  }
+]

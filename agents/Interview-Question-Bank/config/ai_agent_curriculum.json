@@ -1,0 +1,25 @@
+{
+  "version": "ai-agent-1000-v2-harness",
+  "description": "人工配置的技术热点配额，不是实时招聘或搜索热度统计；有据原题优先，资料充分时才生成补题。",
+  "semantic_duplicate_threshold": 0.93,
+  "topics": [
+    {"id": "harness", "name": "Harness Engineering", "count": 100, "hot": true, "title_patterns": ["harness", "loop engineering", "执行脚手架", "运行时脚手架"], "keywords": ["Harness", "Harness Engineering", "Loop Engineering", "执行脚手架", "运行时脚手架"], "facets": ["Harness 与模型和框架的职责边界", "Agent 执行循环、停止条件与预算", "上下文装配、压缩和运行时反馈", "工具沙箱、权限约束与人工介入", "检查点、失败恢复、回放与幂等", "任务验收、回归评测、Trace 与漂移诊断"]},
+    {"id": "rag", "name": "RAG 与检索优化", "count": 140, "hot": true, "keywords": ["RAG", "GraphRAG", "检索", "召回", "RRF", "BM25", "rerank", "重排", "混合搜索", "HyDE"], "facets": ["混合检索与融合", "重排与召回诊断", "GraphRAG 与 Agentic RAG", "查询改写与多跳检索", "引用与幻觉控制", "检索评估与消融"]},
+    {"id": "tools", "name": "工具调用、MCP 与 Skill", "count": 100, "hot": true, "keywords": ["工具", "MCP", "Skill", "Function Calling", "function_call", "tool_call", "JSON Schema", "插件"], "facets": ["MCP 协议与连接", "工具选择与参数校验", "工具权限与边界", "Skill 生命周期", "并行调用与幂等", "结构化输出"]},
+    {"id": "orchestration", "name": "Agent 编排与推理范式", "count": 80, "hot": true, "keywords": ["ReAct", "LangGraph", "规划", "编排", "状态机", "Plan-and-Execute", "Reflection", "循环", "LangChain"], "facets": ["ReAct 与终止控制", "规划与重规划", "LangGraph 状态与检查点", "反思与工作流", "异常与恢复", "框架选型"]},
+    {"id": "multi_agent", "name": "多 Agent 协作", "count": 70, "hot": true, "keywords": ["多智能体", "多 Agent", "多Agent", "multi-agent", "A2A", "AutoGen", "CrewAI", "Supervisor", "子 Agent", "子智能体"], "facets": ["Supervisor 与交接", "通信协议", "任务分解与调度", "冲突仲裁", "失败汇总与取消", "多 Agent 评测"]},
+    {"id": "evaluation", "name": "评估、可观测性与调试", "count": 70, "hot": true, "keywords": ["评估", "评测", "RAGAs", "Trace", "Span", "可观测", "基准", "benchmark", "回放", "LangSmith", "监控"], "facets": ["RAGAs 指标", "端到端任务成功率", "Trace 与故障定位", "离线与在线评估", "LLM 评判偏差", "回归与消融"]},
+    {"id": "security", "name": "安全、权限与治理", "count": 75, "hot": true, "keywords": ["安全", "注入", "权限", "越权", "隐私", "泄露", "沙箱", "审批", "SSRF", "攻击", "合规", "审计"], "facets": ["提示注入", "最小权限与审批", "工具沙箱", "数据隔离与泄露", "攻击面与防御验证", "供应链与审计"]},
+    {"id": "memory", "name": "记忆与上下文工程", "count": 70, "hot": true, "keywords": ["记忆", "上下文", "context", "memory", "遗忘", "压缩", "滑动窗口", "摘要"], "facets": ["短期与长期记忆", "记忆提取与更新", "上下文压缩", "检索与失效", "用户偏好与隔离", "长任务状态"]},
+    {"id": "serving", "name": "推理服务与成本优化", "count": 60, "hot": true, "keywords": ["推理", "vLLM", "KV Cache", "量化", "吞吐", "GPU", "显存", "Token", "延迟", "prefill", "批处理", "蒸馏"], "facets": ["KV Cache 与长上下文", "连续批处理", "量化与推测解码", "路由与模型成本", "吞吐与尾延迟", "推理部署"]},
+    {"id": "prompts", "name": "Prompt 与结构化交互", "count": 35, "hot": false, "keywords": ["Prompt", "提示词", "few-shot", "zero-shot", "CoT", "思维链", "结构化", "格式遵从"], "facets": ["指令层级", "Few-shot 示例", "结构化输出", "提示版本管理", "推理提示", "提示评估"]},
+    {"id": "deployment", "name": "工程部署与可靠性", "count": 35, "hot": false, "keywords": ["部署", "Docker", "Kubernetes", "熔断", "重试", "限流", "降级", "容错", "异步", "服务化", "高可用"], "facets": ["服务化与容器", "熔断重试与幂等", "限流与背压", "检查点与恢复", "多租户隔离", "流式响应与取消"]},
+    {"id": "data", "name": "文档解析与数据工程", "count": 30, "hot": false, "keywords": ["分块", "切块", "chunk", "PDF", "OCR", "解析", "ETL", "清洗", "数据管道", "文档"], "facets": ["文档解析与 OCR", "分块与重叠", "元数据与溯源", "增量同步与去重", "表格与代码结构", "入库一致性"]},
+    {"id": "vectors", "name": "Embedding 与向量数据库", "count": 30, "hot": false, "keywords": ["Embedding", "向量", "Milvus", "HNSW", "FAISS", "ANN", "IVF", "索引", "余弦"], "facets": ["Embedding 选型", "向量索引", "距离度量", "Milvus 一致性", "过滤与多租户", "迁移与重建"]},
+    {"id": "multimodal", "name": "多模态、语音与视觉 Agent", "count": 30, "hot": false, "keywords": ["多模态", "CLIP", "视觉", "语音", "图像", "ViT", "ASR", "TTS", "VLM", "BLIP", "视频"], "facets": ["图文对齐", "视觉编码器", "语音交互链路", "多模态检索", "视觉工具与 GUI", "多模态评估"]},
+    {"id": "finetuning", "name": "微调、对齐与训练", "count": 25, "hot": false, "keywords": ["微调", "LoRA", "SFT", "RLHF", "DPO", "PPO", "GRPO", "对齐", "训练", "奖励模型"], "facets": ["SFT 与数据构造", "LoRA 与参数高效训练", "RLHF 与 DPO", "偏好数据", "训练与 RAG 选型", "过拟合与评估"]},
+    {"id": "foundations", "name": "LLM 与 Agent 基础", "count": 25, "hot": false, "keywords": ["Transformer", "Attention", "QKV", "位置编码", "自注意力", "BERT", "GPT", "Decoder", "Agent 定义", "大模型基础"], "facets": ["Transformer 原理", "Attention 与位置编码", "模型架构", "Agent 基本组成", "能力与边界", "概率与采样"]},
+    {"id": "backend", "name": "后端、缓存与系统基础", "count": 10, "hot": false, "keywords": ["Redis", "MySQL", "Python", "GIL", "锁", "事务", "SQL", "HTTP", "数据库", "消息队列", "FastAPI"], "facets": ["Redis 缓存与锁", "数据库事务", "异步与并发", "队列与任务", "接口设计", "缓存失效"]},
+    {"id": "architecture", "name": "场景设计与产品落地", "count": 15, "hot": false, "keywords": ["系统设计", "架构", "落地", "选型", "需求", "客服", "业务", "端到端", "产品"], "facets": ["场景与边界", "系统架构取舍", "人机协作", "业务效果评估", "最小可用方案", "容量与演进"]}
+  ]
+}

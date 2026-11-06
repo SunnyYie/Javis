@@ -1,0 +1,3 @@
+"""Read-only resume-driven job search."""
+
+__version__ = "0.1.0"

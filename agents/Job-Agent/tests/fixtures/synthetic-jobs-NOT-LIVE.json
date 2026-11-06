@@ -1,0 +1,18 @@
+[
+  {
+    "name": "前端工程师（合成验收岗位，不是真实招聘）",
+    "company": "合成测试公司",
+    "city": "杭州",
+    "salary": "20-30K",
+    "experience": "3-5年",
+    "description": "合成验收 JD，不是真实招聘：使用 React、TypeScript、React Native、Node.js 开发 H5 与 BFF，参与 CLI 工具和 Agent 工程化。本科及以上。"
+  },
+  {
+    "name": "异地岗位（合成）",
+    "company": "合成测试公司",
+    "city": "北京",
+    "salary": "25-35K",
+    "experience": "经验不限",
+    "description": "React TypeScript"
+  }
+]

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "brain-leader"
+version = "0.1.0"
+description = "Evidence-based career planning, resume and interview agent"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "javis-tools", "job-agent", "knowledge-assistant", "interview-question-bank",
+  "langchain>=1,<2", "langchain-openai>=1,<2", "langgraph>=1,<2",
+  "pydantic-settings>=2.6,<3", "python-dotenv>=1,<2", "typer>=0.16,<1",
+  "rich>=13.9,<15", "prompt-toolkit>=3,<4", "filelock>=3.16,<4",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10", "ruff>=0.9,<1", "pexpect>=4.9,<5"]
+
+[project.scripts]
+bl = "brain_leader.cli:app"
+
+[tool.uv.sources]
+javis-tools = { path = "../tools", editable = true }
+job-agent = { path = "../agents/Job-Agent", editable = true }
+knowledge-assistant = { path = "../agents/Knowledge-Assistant", editable = true }
+interview-question-bank = { path = "../agents/Interview-Question-Bank", editable = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/brain_leader"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["live: opt-in real model and provider acceptance"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

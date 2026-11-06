@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "javis-tools"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "job-agent", "knowledge-assistant", "interview-question-bank",
+  "python-docx>=1.1,<2", "reportlab>=4,<5", "filelock>=3.16,<4",
+  "fonttools>=4.60,<5",
+]
+
+[tool.uv.sources]
+job-agent = { path = "../agents/Job-Agent", editable = true }
+knowledge-assistant = { path = "../agents/Knowledge-Assistant", editable = true }
+interview-question-bank = { path = "../agents/Interview-Question-Bank", editable = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/javis_tools"]

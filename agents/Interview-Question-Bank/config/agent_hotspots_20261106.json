@@ -1,0 +1,53 @@
+{
+  "version": "agent-hotspots-20261106-v1",
+  "semantic_duplicate_threshold": 0.93,
+  "description": "按公开项目活跃度、官方协议与已有题目缺口选择；不是招聘热度排名。每个 facet 是一次独立补题任务，不设题库总量上限。",
+  "repositories": [
+    {"repo": "ag-ui-protocol/ag-ui", "query": "events state architecture", "directory": "docs/concepts", "include": "^docs/(concepts|sdk)/.*\\.(md|mdx)$"},
+    {"repo": "google/A2UI", "query": "specification security data binding", "include": "(specification|spec|docs)/.*\\.(md|mdx)$"},
+    {"repo": "browser-use/browser-use", "query": "browser agent security session", "include": "^(docs|examples)/.*\\.(md|mdx|py)$"},
+    {"repo": "webmachinelearning/webmcp", "query": "proposal security modelContext", "include": "\\.(md|bs)$"},
+    {"repo": "OpenHands/OpenHands", "query": "architecture agent runtime", "include": "(docs|skills)/.*\\.(md|mdx)$"},
+    {"repo": "zed-industries/agent-client-protocol", "query": "session protocol permission", "directory": "docs/protocol", "include": "(docs|schema)/.*\\.(md|mdx)$"},
+    {"repo": "dbos-inc/dbos-transact-py", "query": "workflow recovery durability", "include": "^(docs|examples)/.*\\.(md|mdx|py)$"},
+    {"repo": "microsoft/agent-lightning", "query": "training architecture reward tracing", "directory": "docs", "include": "^docs/.*\\.(md|mdx)$"},
+    {"repo": "google-agentic-commerce/AP2", "query": "mandate architecture security", "include": "^(docs|specification|samples)/.*\\.(md|mdx)$"},
+    {"repo": "modelcontextprotocol/modelcontextprotocol", "query": "authorization elicitation sampling tasks", "directory": "docs/specification/2025-11-25/client", "include": "^docs/specification/2025-11-25/.*\\.(md|mdx)$"},
+    {"repo": "alexzhang13/rlm", "query": "architecture recursive context environment", "include": "^(docs|examples)/.*\\.(md|mdx|py)$"},
+    {"repo": "huggingface/smolagents", "query": "code agents secure sandbox", "directory": "docs/source/en/tutorials", "include": "^docs/source/en/.*\\.(md|mdx)$"},
+    {"repo": "langchain-ai/deepagents", "query": "subagents filesystem planning", "directory": "libs/deepagents", "include": "\\.(md|mdx)$"},
+    {"repo": "mem0ai/mem0", "query": "memory update search", "directory": "docs/core-concepts", "include": "^docs/.*\\.(md|mdx)$"},
+    {"repo": "letta-ai/letta", "query": "memory blocks stateful", "include": "\\.(md|mdx)$"},
+    {"repo": "modelcontextprotocol/ext-apps", "query": "security host resource", "directory": "docs", "include": "^docs/.*\\.(md|mdx)$"}
+  ],
+  "web_sources": [
+    "https://docs.ag-ui.com/introduction",
+    "https://ap2-protocol.org/overview",
+    "https://alexzhang13.github.io/blog/2025/rlm",
+    "https://a2ui.org",
+    "https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation",
+    "https://modelcontextprotocol.io/specification/2025-11-25/client/sampling",
+    "https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization",
+    "https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/tasks",
+    "https://agentclientprotocol.com/protocol/v1/session-setup.md",
+    "https://agentclientprotocol.com/protocol/v1/tool-calls.md",
+    "https://agentclientprotocol.com/protocol/v1/prompt-turn.md",
+    "https://agentclientprotocol.com/protocol/v1/security.md",
+    "https://docs.letta.com/agent-sdk/memory/index.md",
+    "https://docs.letta.com/concepts/memfs/index.md",
+    "https://docs.letta.com/concepts/stateful-agents/index.md"
+  ],
+  "topics": [
+    {"id": "agent_ui", "name": "Agent 前端协议与生成式 UI", "hot": true, "keywords": ["AG-UI", "A2UI", "MCP Apps"], "repos": ["ag-ui-protocol/ag-ui", "google/A2UI", "modelcontextprotocol/ext-apps"], "web_sources": ["https://docs.ag-ui.com/introduction", "https://a2ui.org"], "facets": ["AG-UI 事件流、生命周期与共享状态", "AG-UI 前端工具与人在回路", "A2UI 声明式组件、安全边界与数据绑定", "AG-UI、A2UI 与 MCP/A2A 的职责区别", "MCP Apps 的 UI 资源、宿主通信与沙箱隔离"]},
+    {"id": "browser_agents", "name": "浏览器 Agent 与 WebMCP", "hot": true, "keywords": ["browser-use", "WebMCP"], "repos": ["browser-use/browser-use", "webmachinelearning/webmcp"], "facets": ["browser-use 浏览器会话、页面状态与工具执行", "browser-use 任务验证与可观测性", "WebMCP 的 modelContext 与网页工具注册", "WebMCP 用户介入与安全边界"]},
+    {"id": "coding_agents", "name": "编码 Agent 与 ACP", "hot": true, "keywords": ["OpenHands", "ACP"], "repos": ["OpenHands/OpenHands", "zed-industries/agent-client-protocol"], "web_sources": ["https://agentclientprotocol.com/protocol/v1/session-setup.md", "https://agentclientprotocol.com/protocol/v1/tool-calls.md", "https://agentclientprotocol.com/protocol/v1/prompt-turn.md", "https://agentclientprotocol.com/protocol/v1/security.md"], "facets": ["OpenHands 软件工程 Agent 与执行环境", "OpenHands 工具、上下文与任务隔离", "ACP v1 编辑器与 Agent 的会话协议", "ACP v1 工具权限与消息生命周期"]},
+    {"id": "durable_agents", "name": "Agent 持久化执行与工作流恢复", "hot": true, "keywords": ["DBOS"], "repos": ["dbos-inc/dbos-transact-py"], "facets": ["DBOS durable workflow 与普通重试的区别", "DBOS 工作流检查点、步骤结果与恢复", "DBOS Agent 长任务、外部副作用与幂等边界"]},
+    {"id": "agent_training", "name": "Agent 强化学习与 Agent Lightning", "hot": true, "keywords": ["Agent Lightning", "LightningRL"], "repos": ["microsoft/agent-lightning"], "facets": ["Agent Lightning 训练与 Agent 执行解耦", "Agent Lightning 轨迹、奖励与信用分配", "Agent Lightning 追踪与多轮工具任务训练"]},
+    {"id": "agent_commerce", "name": "Agent 支付与 AP2 授权协议", "hot": true, "keywords": ["AP2", "mandate"], "repos": ["google-agentic-commerce/AP2"], "web_sources": ["https://ap2-protocol.org/overview"], "facets": ["AP2 Intent、Cart 与 Payment Mandate 的职责", "AP2 有人和无人值守支付授权", "AP2 交易证据、信任边界与审计"]},
+    {"id": "mcp_advanced", "name": "MCP 高级协议与安全授权", "hot": true, "keywords": ["MCP", "elicitation", "sampling", "OAuth"], "repos": ["modelcontextprotocol/modelcontextprotocol"], "web_sources": ["https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation", "https://modelcontextprotocol.io/specification/2025-11-25/client/sampling", "https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization", "https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/tasks"], "facets": ["MCP elicitation 用户信息请求与边界", "MCP sampling 服务端请求模型能力", "MCP OAuth 资源服务器、令牌受众与授权", "MCP 长运行任务 tasks 与状态生命周期"]},
+    {"id": "recursive_context", "name": "RLM 递归上下文与外部执行环境", "hot": true, "keywords": ["RLM", "recursive"], "repos": ["alexzhang13/rlm"], "web_sources": ["https://alexzhang13.github.io/blog/2025/rlm"], "facets": ["RLM 将长上下文作为外部环境的机制", "RLM 递归子调用与信息聚合", "RLM 执行环境、预算与可观测性"]},
+    {"id": "code_agents", "name": "CodeAct 与代码执行式工具编排", "hot": true, "keywords": ["smolagents", "CodeAgent"], "repos": ["huggingface/smolagents"], "facets": ["smolagents CodeAgent 与 JSON 工具调用的区别", "smolagents 代码执行沙箱与授权导入", "smolagents 托管 Agent、工具组合与执行记录"]},
+    {"id": "deep_agents", "name": "Deep Agents 与文件系统上下文", "hot": true, "keywords": ["deepagents", "Deep Agents"], "repos": ["langchain-ai/deepagents"], "facets": ["Deep Agents 规划与文件系统上下文卸载", "Deep Agents 子 Agent 隔离与委派", "Deep Agents 后端存储、沙箱与长任务"]},
+    {"id": "memory_systems", "name": "Mem0、Letta 与有状态记忆系统", "hot": true, "keywords": ["Mem0", "Letta"], "repos": ["mem0ai/mem0", "letta-ai/letta"], "web_sources": ["https://docs.letta.com/agent-sdk/memory/index.md", "https://docs.letta.com/concepts/memfs/index.md", "https://docs.letta.com/concepts/stateful-agents/index.md"], "facets": ["Mem0 记忆提取、更新与检索流程", "Letta 有状态 Agent 与记忆块", "Mem0/Letta 记忆作用域、持久化与架构取舍", "Letta MemFS、跨会话记忆与后台 dreaming"]}
+  ]
+}

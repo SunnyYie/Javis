@@ -1,0 +1,54 @@
+[
+  {
+    "id": "harness-list",
+    "question": "根据 ai-boost/awesome-harness-engineering 的 README，这份清单主要收录什么？它按厂商还是按问题组织设计原语？",
+    "reference": "这是为构建可靠 AI agent harness 精选资源、模式和模板的清单。收录解决上下文、工具、规划、权限、记忆、验证、沙箱等具体 harness 工程问题的资源，并要求推荐理由。Design Primitives 按所解决的问题而非厂商组织。",
+    "evidence": [
+      {"source": "https://github.com/ai-boost/awesome-harness-engineering", "path": "README.md", "contains": "Curated resources, patterns, and templates"},
+      {"source": "https://github.com/ai-boost/awesome-harness-engineering", "path": "README.md", "contains": "not by vendor"}
+    ]
+  },
+  {
+    "id": "ragflow-deploy",
+    "question": "infiniflow/ragflow 的定位是什么？如何在本地部署？根据 README 说明两种方式及源码开发的语言环境要求。",
+    "reference": "RAGFlow 自述为融合 RAG 与 Agent 能力的开源检索增强生成引擎，为 LLM 提供上下文层。支持 Docker 部署和源码启动；Docker 无需 Go 编译器，源码开发调试需 go.mod 指定的 Go 版本，前端开发还需 Node.js 和 npm。",
+    "evidence": [
+      {"source": "https://github.com/infiniflow/ragflow", "path": "README.md", "contains": "What is RAGFlow?"},
+      {"source": "https://github.com/infiniflow/ragflow", "path": "README.md", "contains": "Docker deployment does not require a Go compiler"}
+    ]
+  },
+  {
+    "id": "cross-project",
+    "question": "根据本地已入库 README，ai-boost/awesome-harness-engineering 和 infiniflow/ragflow 分别是什么？请对比定位，区分资料汇编与实际项目，并附来源。",
+    "reference": "awesome-harness-engineering 是面向 agent harness 的精选资源、模式和模板汇编。RAGFlow 是融合 RAG 与 Agent 的开源引擎，提供上下文层、预置 Agent 模板，并支持 Docker 与源码部署，是实际软件项目。",
+    "evidence": [
+      {"source": "https://github.com/ai-boost/awesome-harness-engineering", "path": "README.md", "contains": "Curated resources, patterns, and templates"},
+      {"source": "https://github.com/infiniflow/ragflow", "path": "README.md", "contains": "What is RAGFlow?"}
+    ]
+  },
+  {
+    "id": "langchain-harness",
+    "question": "LangChain 的 create_agent 是什么？它的 harness 由哪些部分组成？请引用资料。",
+    "reference": "create_agent 是 LangChain 提供的极简、可配置 agent harness。Agent = Model + Harness，harness 包括模型循环外围的提示词、工具和塑造行为的 middleware。LangChain agents 构建在 LangGraph 上，可通过中间件增量组合所需能力。",
+    "evidence": [
+      {"source": "https://docs.langchain.com/oss/python/langchain/overview", "contains": "highly configurable agent harness"}
+    ]
+  },
+  {
+    "id": "fastmcp-code",
+    "question": "根据已入库的 FastMCP 官方材料，工具函数如何通过 Context 类型注解自动注入请求上下文，并读取当前请求 ID？给出简短代码和引用，不扩展到会话未建立等边界情况。",
+    "reference": "在 @mcp.tool 工具函数上声明 ctx: Context 参数，FastMCP 自动注入当前请求的 Context，客户端不需传 ctx。通过 ctx.request_id 读取当前 MCP 请求的唯一 ID。示例：from fastmcp import FastMCP, Context；mcp = FastMCP('demo')；@mcp.tool；async def request_id(ctx: Context) -> str: return ctx.request_id。",
+    "evidence": [
+      {"source": "https://gofastmcp.com/v2/servers/context", "contains": "ctx.request_id"}
+    ]
+  },
+  {
+    "id": "deepseek-english",
+    "question": "What architecture powers deepseek-ai/deepseek-harness, and is its current release presented as stable? Answer from its README with citations.",
+    "reference": "DeepSeek Harness (dsh) is an open-source agent harness developed by DeepSeek AI. It uses an everything-is-a-plugin architecture powered by Cordis. The README labels it developer preview, iterating rapidly, and warns that compatibility-breaking changes will occur; it should not be presented as a stable release.",
+    "evidence": [
+      {"source": "https://github.com/deepseek-ai/deepseek-harness", "path": "README.md", "contains": "everything-is-a-plugin"},
+      {"source": "https://github.com/deepseek-ai/deepseek-harness", "path": "README.md", "contains": "COMPATIBILITY-BREAKING CHANGES"}
+    ]
+  }
+]
