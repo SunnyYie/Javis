@@ -10,6 +10,7 @@ dependencies = [
   "job-agent", "knowledge-assistant", "interview-question-bank",
   "python-docx>=1.1,<2", "reportlab>=4,<5", "filelock>=3.16,<4",
   "fonttools>=4.60,<5",
+  "langsmith>=0.14.17,<0.15",
 ]
 
 [tool.uv.sources]

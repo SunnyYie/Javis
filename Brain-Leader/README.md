@@ -185,6 +185,69 @@ uv run bl sessions delete 会话ID
 使用 Brain-Leader 时不得同时运行同库的 ka/iqb chat、ingest、sync、seed 等操作。**
 首版没有多用户、后台爬虫、自动投递、招聘消息、语音和 Web。
 
+## LangSmith 调用链
+
+默认关闭，不依赖全局 `LANGSMITH_*` 开关。不需要 FastAPI 或将助手改成 HTTP 服务。
+本次实现的实测链路及验收边界见 [TRACING.md](TRACING.md)。
+
+仅记录本地调用链：
+
+```bash
+uv run bl chat --trace-local --allow-remote -q "解释 LangChain 工具调用" --json
+uv run bl trace-report /绝对路径/runtime/traces/返回的trace_id.json
+```
+
+上传前，在私有 `Brain-Leader/.env` 中配置专用凭证，不能使用 LLM API Key 替代：
+
+```dotenv
+BL_TRACE_MODE=langsmith
+BL_LANGSMITH_API_KEY=填写专用LangSmithKey
+BL_LANGSMITH_PROJECT=brain-leader
+BL_LANGSMITH_ENDPOINT=https://api.smith.langchain.com
+# 组织级 Key 如需工作区，显式填写授权工作区 UUID：
+# BL_LANGSMITH_WORKSPACE_ID=
+```
+
+```bash
+uv run bl chat --allow-trace-upload
+uv run bl chat --allow-remote --allow-trace-upload -q "解释 LangChain 工具调用" --json
+```
+
+交互模式也可逐次启动时确认上传；授权不保存到职业画像，模型不能授予。
+`--allow-remote`、`/consent` 只授权原有模型处理，**不授权 LangSmith**。
+`--trace-local` 强制本地；缺少专用 Key 或上传授权时只落本地。
+普通 `bl doctor` 仅显示配置状态，不创建 LangSmith 客户端或探测云端。
+
+追踪只保留随机 trace/span ID、固定节点名、父子关系、时间、状态、数量、
+缓存命中及模型返回的 Token 数；不保留提示词、工具参数、简历、联系方式、
+面试作答、参考答案、外部正文、原始异常、文件路径或业务会话 ID。
+云端 `inputs/outputs` 均为空，禁用自动运行环境采集，不能用它回放私有对话或评估答案正文。
+Token 用量缺失时显示 `token_usage_runs` 覆盖，不推算费用或把缺失当实测零值。
+
+调用链位于 `BL_DATA_DIR/traces`，权限为目录 `0700`、文件 `0600`，已被 Git 忽略。
+这是不含业务会话 ID 的独立运行元数据，不随会话删除；可按本机保留策略单独清理。
+每次请求最多 512 个 span，上传队列最多 8 个请求，单次网络连接/读取超时各 2 秒、
+不自动重试，关闭最多等待 3 秒；失败、队列满或本地落盘失败不改变业务结果。
+`queued` 不表示上传成功；文件中的 `sent_unverified` 也只表示 HTTP 接收，
+仍须在授权项目按 `trace_id` 核验可见性，不能据此宣称云端验收完成。
+
+主控图、工具、模型及三个助手通过同进程回调关联；知识线程显式复制上下文，
+仍在原线程创建、使用和关闭 SQLite。记录检索、Embedding、向量查询、
+Reranker、缓存及题库生成/核验阶段，不修改原助手的独立 CLI。
+节点时间含子节点，流式调用可重叠，不能将表中各行相加，也不是 QPS/P99 压测。
+SDK 内部 HTTP 重试不是独立模型调用，外部资料采集目前以图阶段记录，不逐 URL 抓包。
+
+真实验证脚本会调用收费模型、复制语料到独立命名空间，必须使用全新输出目录：
+
+```bash
+uv run python -B scripts/trace_smoke.py /绝对路径/新隔离目录
+# 仅在已有专用 Key 且明确同意遥测上传时添加 --upload
+```
+
+程序集成应使用 `with service.telemetry.request("chat"):` 包住业务调用并在最后
+`service.close()`。上传另需宿主获得用户授权后设置
+`service.telemetry.upload_allowed = True`；不能把这项设置注册为模型工具。
+
 ## 扩展与验证
 
 根目录 `skills` 的六份 `SKILL.md` 是按需读取的流程指导，不是可执行代码；

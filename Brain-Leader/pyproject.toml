@@ -10,6 +10,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
   "javis-tools", "job-agent", "knowledge-assistant", "interview-question-bank",
   "langchain>=1,<2", "langchain-openai>=1,<2", "langgraph>=1,<2",
+  "langsmith>=0.14.17,<0.15",
   "pydantic-settings>=2.6,<3", "python-dotenv>=1,<2", "typer>=0.16,<1",
   "rich>=13.9,<15", "prompt-toolkit>=3,<4", "filelock>=3.16,<4",
 ]

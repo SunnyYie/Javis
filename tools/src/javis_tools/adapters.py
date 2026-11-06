@@ -1,9 +1,12 @@
 from concurrent.futures import ThreadPoolExecutor
+from contextvars import copy_context
 from pathlib import Path
 
 from dotenv import dotenv_values
 from job_agent.config import Settings as JobSettings
 from job_agent.service import Service as JobService
+
+from .tracing import instrument, result_metrics, span
 
 MODEL_KEYS = ("LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL", "LLM_TIMEOUT")
 
@@ -33,6 +36,9 @@ class Assistants:
                 **self.settings.model_fields_for_children(),
             )
             self._job = JobService(s, self.sid, emit=self.emit)
+            for method in ("parse_resume", "import_file", "search", "match", "export"):
+                instrument(self._job, method, "job." + method)
+            instrument(self._job.models, "structured", "models.structured")
         return self._job
 
     def knowledge_settings(self, kind):
@@ -66,9 +72,29 @@ class Assistants:
                 from knowledge_assistant.agent import Assistant
             else:
                 from interview_question_bank.agent import Assistant
-            self._assistants[kind] = Assistant(
-                self.knowledge_settings(kind), stage=self.emit, emit=lambda _: None,
-            )
+            with span("assistant.initialize"):
+                child = Assistant(
+                    self.knowledge_settings(kind), stage=self.emit, emit=lambda _: None,
+                )
+            knowledge = getattr(child, "knowledge", None)
+            if knowledge is not None:
+                instrument(knowledge, "retrieve", "retrieval", "retriever")
+                for owner, method, name in (
+                    ("embeddings", "query", "embedding"),
+                    ("index", "search", "vector_search"),
+                    ("reranker", "scores", "reranker"),
+                ):
+                    obj = getattr(knowledge, owner, None)
+                    if obj is not None:
+                        instrument(obj, method, name, cache=True)
+            cache = getattr(child, "cache", None)
+            if cache is not None:
+                instrument(cache, "get", "answer_cache", cache=True)
+            models = getattr(child, "models", None)
+            if models is not None:
+                for method in ("rewrite", "answer", "parse", "assess", "draft", "verify"):
+                    instrument(models, method, "models." + method)
+            self._assistants[kind] = child
         return self._assistants[kind]
 
     def ask(self, kind, question, history=None, local_only=False):
@@ -76,10 +102,12 @@ class Assistants:
 
         # Child stores bind SQLite connections to their creation thread.
         def invoke():
-            with tracing_context(enabled=False):
-                return self._assistant(kind).ask(question, history or [], local_only).to_dict()
+            with tracing_context(enabled=False), span("assistant." + kind) as metrics:
+                result = self._assistant(kind).ask(question, history or [], local_only).to_dict()
+                metrics.update(result_metrics(result))
+                return result
 
-        return self._worker.submit(invoke).result()
+        return self._worker.submit(copy_context().run, invoke).result()
 
     def close(self):
         if self._closed:

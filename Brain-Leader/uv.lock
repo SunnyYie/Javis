@@ -78,6 +78,7 @@ dependencies = [
     { name = "langchain" },
     { name = "langchain-openai" },
     { name = "langgraph" },
+    { name = "langsmith" },
     { name = "prompt-toolkit" },
     { name = "pydantic-settings" },
     { name = "python-dotenv" },
@@ -106,6 +107,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=1,<2" },
     { name = "langchain-openai", specifier = ">=1,<2" },
     { name = "langgraph", specifier = ">=1,<2" },
+    { name = "langsmith", specifier = ">=0.14.17,<0.15" },
     { name = "locust", marker = "extra == 'perf'", specifier = ">=2.40,<3" },
     { name = "pexpect", marker = "extra == 'test'", specifier = ">=4.9,<5" },
     { name = "prompt-toolkit", specifier = ">=3,<4" },
@@ -766,6 +768,7 @@ dependencies = [
     { name = "interview-question-bank" },
     { name = "job-agent" },
     { name = "knowledge-assistant" },
+    { name = "langsmith" },
     { name = "python-docx" },
     { name = "reportlab" },
 ]
@@ -777,6 +780,7 @@ requires-dist = [
     { name = "interview-question-bank", editable = "../agents/Interview-Question-Bank" },
     { name = "job-agent", editable = "../agents/Job-Agent" },
     { name = "knowledge-assistant", editable = "../agents/Knowledge-Assistant" },
+    { name = "langsmith", specifier = ">=0.14.17,<0.15" },
     { name = "python-docx", specifier = ">=1.1,<2" },
     { name = "reportlab", specifier = ">=4,<5" },
 ]

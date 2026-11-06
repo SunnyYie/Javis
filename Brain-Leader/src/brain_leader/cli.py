@@ -235,6 +235,16 @@ def command(service, text):
 
 
 def run(service, text):
+    action = text.split(maxsplit=1)[0] if text.startswith("/") else "chat"
+    with service.telemetry.request(action) as metrics:
+        result = _run(service, text)
+        metrics["status"] = result["status"]
+    if service.telemetry.mode != "off" and service.telemetry.last:
+        result["trace"] = dict(service.telemetry.last)
+    return result
+
+
+def _run(service, text):
     try:
         service.calls = 0
         action = text.split(maxsplit=1)[0] if text.startswith("/") else "chat"
@@ -287,6 +297,9 @@ def display(result, json_output=False):
         errors.print("警告：" + warning)
     if result["error"]:
         errors.print("错误：" + result["error"])
+    if result.get("trace") and not json_output:
+        trace = result["trace"]
+        errors.print(f"调用链：{trace['trace_id']} | {trace['upload']} | {trace['path']}")
 
 
 @app.command()
@@ -296,6 +309,8 @@ def chat(
     json_output: Annotated[bool, typer.Option("--json")] = False,
     allow_remote: bool = False,
     local_only: bool = False,
+    trace_local: bool = False,
+    allow_trace_upload: bool = False,
 ):
     """连续对话或单次请求。--local-only 限制资料检索，不代表 LLM 离线。"""
     if json_output and question is None:
@@ -303,6 +318,19 @@ def chat(
         raise typer.Exit(2)
     try:
         with service_context(session) as service:
+            if trace_local:
+                service.telemetry.mode = "local"
+            service.telemetry.upload_allowed = allow_trace_upload
+            if service.telemetry.mode == "langsmith":
+                if question is None and not allow_trace_upload:
+                    service.telemetry.upload_allowed = Confirm.ask(
+                        "允许向配置的 LangSmith 上传节点、耗时、状态、Token 数？"
+                        "不含提示词、简历、作答和原始异常正文", default=False,
+                    )
+                if service.telemetry.status() != "ready":
+                    errors.print(
+                        "追踪仅保留本地；LangSmith：" + service.telemetry.status(),
+                    )
             if local_only:
                 service.settings.local_only = True
             if allow_remote:
@@ -355,6 +383,13 @@ def doctor(probe_model: bool = False):
                    if (settings.skills_dir / name / "SKILL.md").is_file()],
         "shared_corpus_warning": "单用户串行；不要与 ka/iqb 的 chat、ingest、sync 同时运行",
         "boss_acceptance": "登录后实时搜索尚未通过独立验收",
+        "tracing": {
+            "mode": settings.trace_mode, "project": settings.langsmith_project,
+            "api_key_configured": bool(settings.langsmith_api_key.get_secret_value()),
+            "privacy": "metadata_only",
+            "upload_requires_separate_consent": True,
+            "probe_performed": False,
+        },
     }
     for kind in ("knowledge", "questions"):
         s = adapters.knowledge_settings(kind)
@@ -384,6 +419,16 @@ def doctor(probe_model: bool = False):
             Probe, "返回 ok=true，这是不含个人资料的结构化探针。", {},
         ).ok
     console.print(json.dumps(report, ensure_ascii=False, indent=2))
+
+
+@app.command("trace-report")
+def trace_report(path: Path):
+    """汇总本地 metadata-only 调用链；不调用模型或上传数据。"""
+    from javis_tools.tracing import summarize
+
+    console.print(json.dumps(
+        summarize(json.loads(path.read_text(encoding="utf-8"))), ensure_ascii=False, indent=2,
+    ))
 
 
 @sessions.command("list")

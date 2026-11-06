@@ -46,6 +46,7 @@
 | `../tools/src/javis_tools/adapters.py` | 三个助手的服务适配及知识助手线程所有权 |
 | `../tools/src/javis_tools/documents.py` | 同源 Markdown、DOCX、PDF 排版与字体嵌入 |
 | `../tools/src/javis_tools/isolation.py` | 真实验收的语料隔离副本与命名空间 |
+| `../tools/src/javis_tools/tracing.py` | 默认关闭的 metadata-only LangSmith 及本地链路 |
 | `../skills/*/SKILL.md` | profile、resume、jobs、prepare、interview、review 六类流程 |
 | `data/`、`../memory/` | 私有运行状态与项目自身的跨会话记忆 |
 
@@ -75,6 +76,13 @@ uv run bl chat --session 用户指定的会话ID
 `BL_LOCAL_ONLY=true` 只禁止两套知识助手联网补充资料，
 不禁止远程 LLM，也不禁止用户显式 `/search`。
 主应用默认模型超时 120 秒、工具预算 12 次；保持有限预算及取消处理，不以无限重试掩盖失败。
+
+`BL_TRACE_MODE=off|local|langsmith`；只有用户另外同意 `--allow-trace-upload`
+或启动时确认，才可向 LangSmith 上传。`/consent` 不包括遥测授权。
+专用凭证使用 `BL_LANGSMITH_API_KEY`，不复用 LLM Key、不改全局环境。
+保持自动正文追踪关闭，只经白名单回调上传固定节点、父子关系、耗时、状态、
+缓存命中、Token 用量等；不能为调试打开简历、提示词、作答或参考答案采集。
+调用链边界、未通过的云端验收及复现命令见 [TRACING.md](TRACING.md)。
 
 ## 4. 用户控制面与安全边界
 
@@ -177,6 +185,8 @@ uv run bl chat --session 用户指定的会话ID
 
 主控按串行配置运行；两套知识助手由适配器的单一专用线程统一创建、调用和关闭。
 不得把其 SQLite 连接交给任意工作线程，也不要为提速改成并行访问同库。
+适配器用 `copy_context()` 传播 metadata-only 父子链路，不能移除后改用全局变量传递上下文。
+遥测发送使用有限队列及独立短时线程，失败不能回滚或重新执行已经完成的业务。
 
 性能工具见 `perf/README.md`，实测与限制见 `PERFORMANCE.md`。临时 HTTP 适配器仅供
 本机隔离压测，不是生产接口；禁止压测付费模型、招聘网站或共享写入命名空间。

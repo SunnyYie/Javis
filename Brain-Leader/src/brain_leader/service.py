@@ -3,6 +3,7 @@ import unicodedata
 from pathlib import Path
 
 from javis_tools.adapters import Assistants
+from javis_tools.tracing import Telemetry, instrument
 
 from .interview import Interviews
 from .llm import Models
@@ -33,6 +34,9 @@ class Service:
         self.interviews = Interviews(self)
         self.user_text, self.calls = "", 0
         self.last_results = []
+        self.telemetry = Telemetry(settings)
+        instrument(self, "tool", "tool", "tool")
+        instrument(self.models, "structured", "models.structured")
 
     def state(self):
         return self.store.state(self.sid)
@@ -410,4 +414,7 @@ class Service:
         return {"deleted": self.sid, "warnings": warnings}
 
     def close(self):
-        self.adapters.close()
+        try:
+            self.adapters.close()
+        finally:
+            self.telemetry.close()
