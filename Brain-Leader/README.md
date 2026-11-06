@@ -13,7 +13,8 @@ uv run bl chat
 ```
 
 依赖 Python 3.12。现有知识助手与题库的 Milvus/Redis 服务需已启动；
-岗位缓存使用 Job-Agent 原有 Redis。主应用不新增容器、不修改原助手代码或数据库结构。
+岗位缓存使用 Job-Agent 原有 Redis。主应用不新增容器；性能优化复用原助手的检索实现，
+不修改数据库结构。
 新虚拟环境通过当前路径安装三个助手及共享工具包，不依赖旧虚拟环境的绝对路径入口。
 
 模型默认显式读取 `../agents/Knowledge-Assistant/.env` 的四个模型字段，
@@ -223,3 +224,17 @@ Word/PDF 需另外渲染逐页检查；JSON/XML 内容一致性不能代替视�
 `scripts/visual_fixture.py` 生成。`data/acceptance` 仅用于可清理的测试运行产物，
 不要在其中存放正式会话或唯一原始材料。
 历史通过数量、失败摘要和未验证范围见 `ACCEPTANCE.md`；历史原始运行产物已按要求清理。
+
+## 性能
+
+真实 profiling、Locust 对照结果和限制见 [PERFORMANCE.md](PERFORMANCE.md)；
+安装及复现命令见 [perf/README.md](perf/README.md)。压测使用临时 loopback HTTP 适配器，
+不是生产 Web API，不向远程 LLM 或招聘网站发送压测流量。
+
+两套知识助手默认使用每实例 32 条的精确推理 LRU，复用相同查询向量和相同有序候选的
+重排分数，不缓存整份引用或绕过来源检查。缓存仅在进程内，重启清空；
+活跃片段快照检查本连接写入及外部 SQLite 提交，返回独立对象。
+`BL_INFERENCE_CACHE_SIZE=0` 可关闭推理缓存；未命中的新查询仍需完整 CPU 推理。
+可选 `BL_EMBEDDING_BATCH_SIZE`、`BL_RERANKER_BATCH_SIZE` 覆盖子助手配置；
+默认 Embedding 为 16，知识重排为 4、题库重排为 8。INT8 模型可能对批组成敏感，
+调整前须比较质量，不能只看 QPS。

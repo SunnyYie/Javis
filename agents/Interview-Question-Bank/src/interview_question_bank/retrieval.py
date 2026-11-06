@@ -3,7 +3,7 @@ import logging
 import math
 import re
 import time
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 
 from .chunking import Chunker
 from .config import Settings
@@ -17,6 +17,9 @@ class Embeddings:
         self._model = None
         self._tokenizer = None
         self._dimension = None
+        self._query_cache = OrderedDict()
+        self._query_model = None
+        self.last_cache_hit = False
 
     @property
     def model(self):
@@ -46,12 +49,30 @@ class Embeddings:
         return self._tokenizer
 
     def documents(self, texts: list[str]) -> list[list[float]]:
-        return [v.tolist() for v in self.model.embed(texts, batch_size=16)]
+        return [
+            v.tolist() for v in self.model.embed(texts, batch_size=self.s.embedding_batch_size)
+        ]
 
     def query(self, text: str) -> list[float]:
+        self.last_cache_hit = False
         if len(self.tokenizer.encode(text).ids) > 512:
             raise ServiceError("embedding", "query_token_limit")
-        return next(self.model.query_embed(text)).tolist()
+        model = self.model
+        capacity = self.s.inference_cache_size
+        if model is not self._query_model or not capacity:
+            self._query_cache.clear()
+            self._query_model = model
+        key = (self.s.embedding_model, text)
+        if capacity and key in self._query_cache:
+            self.last_cache_hit = True
+            self._query_cache.move_to_end(key)
+            return list(self._query_cache[key])
+        vector = next(model.query_embed(text)).tolist()
+        if capacity:
+            self._query_cache[key] = tuple(vector)
+            while len(self._query_cache) > capacity:
+                self._query_cache.popitem(last=False)
+        return vector
 
     @property
     def dimension(self):
@@ -177,8 +198,12 @@ class Reranker:
     def __init__(self, settings: Settings):
         self.s = settings
         self._model = None
+        self._score_cache = OrderedDict()
+        self._score_model = None
+        self.last_cache_hit = False
 
     def scores(self, query: str, chunks: list[Chunk]) -> list[float]:
+        self.last_cache_hit = False
         try:
             if self._model is None:
                 from fastembed.rerank.cross_encoder import TextCrossEncoder
@@ -188,12 +213,32 @@ class Reranker:
                     cache_dir=str(self.s.model_cache_dir or self.s.data_dir / "models"),
                     threads=4,
                 )
-            scores = list(self._model.rerank(
-                query, [c.text for c in chunks], batch_size=self.s.reranker_batch_size,
+            model = self._model
+            capacity = self.s.inference_cache_size
+            if model is not self._score_model or not capacity:
+                self._score_cache.clear()
+                self._score_model = model
+            texts = [c.text for c in chunks]
+            rank = model.rerank
+            key = (
+                self.s.reranker_model, self.s.reranker_batch_size, query, tuple(texts),
+                getattr(rank, "__func__", rank),
+            )
+            if capacity and key in self._score_cache:
+                self.last_cache_hit = True
+                self._score_cache.move_to_end(key)
+                return list(self._score_cache[key])
+            scores = list(rank(
+                query, texts, batch_size=self.s.reranker_batch_size,
             ))
             if len(scores) != len(chunks) or not all(math.isfinite(v) for v in scores):
                 raise ValueError("Invalid cross-encoder scores")
-            return [float(v) for v in scores]
+            values = [float(v) for v in scores]
+            if capacity:
+                self._score_cache[key] = tuple(values)
+                while len(self._score_cache) > capacity:
+                    self._score_cache.popitem(last=False)
+            return values
         except Exception as exc:
             raise ServiceError("reranker", "model_or_scoring_failed") from exc
 
@@ -286,5 +331,8 @@ class Knowledge:
             final_ids=[c.id for c in result],
             rerank_seconds=round(time.monotonic() - rerank_started, 4),
             seconds=round(time.monotonic() - started, 4),
+            embedding_cache_hit=getattr(self.embeddings, "last_cache_hit", False),
+            reranker_cache_hit=getattr(self.reranker, "last_cache_hit", False)
+            if scored else False,
         )
         return result

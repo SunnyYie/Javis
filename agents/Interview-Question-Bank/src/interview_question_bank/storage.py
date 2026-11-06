@@ -47,6 +47,8 @@ class Store:
         """)
         with self.db:
             self.db.execute("INSERT OR IGNORE INTO meta VALUES('corpus_id',?)", (uuid.uuid4().hex,))
+        self._active_stamp = None
+        self._active_payloads = ()
 
     @property
     def version(self) -> int:
@@ -64,12 +66,19 @@ class Store:
         return [dict(r) for r in self.db.execute("SELECT * FROM sources ORDER BY source")]
 
     def active_chunks(self) -> list[Chunk]:
-        return [
-            Chunk(**json.loads(r[0]))
-            for r in self.db.execute(
+        # Version alone misses same-content metadata refreshes and external writes.
+        stamp = (self.db.total_changes, self.db.execute("PRAGMA data_version").fetchone()[0])
+        if self.db.in_transaction or stamp != self._active_stamp:
+            payloads = tuple(json.loads(r[0]) for r in self.db.execute(
                 "SELECT payload FROM chunks JOIN active ON chunks.id=active.chunk_id"
-            )
-        ]
+            ))
+            # Rollback does not reset total_changes; never cache uncommitted rows.
+            if not self.db.in_transaction:
+                self._active_payloads = payloads
+                self._active_stamp = stamp
+        else:
+            payloads = self._active_payloads
+        return [Chunk(**payload) for payload in payloads]
 
     def vectors_by_content(self, source: str) -> dict[str, list[float]]:
         rows = self.db.execute(

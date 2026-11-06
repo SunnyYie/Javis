@@ -20,6 +20,7 @@ def cache_key(question, history, settings, version, corpus_id=""):
             RETRIEVAL_VERSION,
             settings.rerank_enabled,
             settings.reranker_model,
+            settings.reranker_batch_size,
             settings.rerank_candidates,
             settings.readme_policy,
             settings.hybrid_head,

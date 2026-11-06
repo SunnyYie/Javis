@@ -54,6 +54,10 @@ class Assistants:
         )
         if namespace:
             options["index_namespace"] = namespace
+        for field in ("embedding_batch_size", "reranker_batch_size", "inference_cache_size"):
+            value = getattr(self.settings, field, None)
+            if value is not None:
+                options[field] = value
         return Settings(**options)
 
     def _assistant(self, kind):

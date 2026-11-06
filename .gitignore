@@ -74,6 +74,11 @@ htmlcov/
 test-results/
 playwright-report/
 
+# Generated profiling traces may contain runtime paths and request context.
+*.prof
+*.pstats
+*.lprof
+
 # Local editor/OS files. Keep uv.lock and configuration examples tracked.
 .DS_Store
 .idea/

@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     llm_timeout: float = Field(120, gt=0, le=600)
     tool_limit: int = Field(12, ge=1, le=30)
     local_only: bool = False
+    embedding_batch_size: int | None = Field(None, ge=1, le=128)
+    reranker_batch_size: int | None = Field(None, ge=1, le=32)
+    inference_cache_size: int | None = Field(None, ge=0, le=256)
     resume_font_path: Path | None = None
     resume_font_index: int = Field(0, ge=0, le=10)
     ka_data_dir: Path | None = None

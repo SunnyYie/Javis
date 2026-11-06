@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     reranker_model: str = "BAAI/bge-reranker-v2-m3-int8"
     retrieval_candidates: int = Field(48, ge=8, le=200)
     reranker_batch_size: int = Field(8, ge=1, le=32)
+    embedding_batch_size: int = Field(16, ge=1, le=128)
+    inference_cache_size: int = Field(32, ge=0, le=256)
     milvus_uri: str = "http://127.0.0.1:19532"
     milvus_token: SecretStr = SecretStr("")
     index_namespace: str = Field("iqb", pattern=r"^[a-z][a-z0-9_]{0,31}$")
@@ -54,6 +56,7 @@ class Settings(BaseSettings):
             "candidates": self.retrieval_candidates,
             "reranker_enabled": self.reranker_enabled,
             "reranker_model": self.reranker_model,
+            "reranker_batch_size": self.reranker_batch_size,
         }
 
 

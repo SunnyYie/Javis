@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     rerank_enabled: bool = True
     reranker_model: str = "BAAI/bge-reranker-v2-m3-int8"
     rerank_candidates: int = Field(40, ge=8, le=40)
+    embedding_batch_size: int = Field(16, ge=1, le=128)
+    reranker_batch_size: int = Field(4, ge=1, le=32)
+    inference_cache_size: int = Field(32, ge=0, le=256)
     readme_policy: Literal["canonical", "all"] = "canonical"
     hybrid_head: int = Field(1, ge=0, le=2)
     eval_max_tokens: int = Field(16384, ge=1024, le=65536)

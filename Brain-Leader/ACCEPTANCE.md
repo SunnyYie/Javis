@@ -6,7 +6,7 @@
 JUnit 报告、截图、渲染中间文件及导出文件。本文件保留历史结果与未通过项，
 不再提供已删除原始证据的链接，也不代表清理时重新执行了真实服务验收。
 测试代码、合成输入和复现脚本仍保留，重新验收方法见 `README.md`。
-清理后的正式库一致性专项复测见下一节，本轮精简报告仍保留。
+正式库一致性专项复测结果见下一节；其精简运行产物也已按本次要求清理，仅保留本文摘要。
 
 ## 正式库一致性专项复测
 
@@ -24,11 +24,9 @@ RAG 面试题后，再执行原有 `test_production_corpus_identity_and_version_
 本轮使用 `BL_LOCAL_ONLY=true` 禁止联网补充资料，但调用真实配置模型和知识服务，
 不是 mock，也不是全冷缓存测试。
 
-精简证据：
-[前后版本及身份](data/acceptance/20261106-corpus-recheck-01/production-corpus-check.json)、
-[隔离查询结果](data/acceptance/20261106-corpus-recheck-01/isolated-corpus-queries.json)、
-[JUnit](data/acceptance/20261106-corpus-recheck-01/junit.xml)。
-运行数据、记忆及语料的本地临时副本已自动删除，未删除外部服务集合或缓存。
+原精简记录位于 `data/acceptance/20261106-corpus-recheck-01/`，
+含前后版本、隔离查询及 JUnit；现已按用户要求清理，不再提供失效链接。
+运行数据、记忆及语料的本地临时副本已删除，未删除外部服务集合或缓存。
 
 仅覆盖本轮隔离查询期间的正式库身份及版本一致性，不证明历史运行未变化、
 所有数据库字段均不变或长期无并发写入，也不重新宣称整个业务闭环通过。
