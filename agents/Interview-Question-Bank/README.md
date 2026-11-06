@@ -140,7 +140,9 @@ uv run python scripts/validate_question_bank.py \
 
 `config/agent_hotspots_20261106.json` 保存浏览器、GitHub、Tavily 和本地 Knowledge-Assistant 调研后选择的专项方向。它不替换基线分类，不重新分配或删除原题，也不设置题库总量上限。热点判断来自公开项目/协议与资料线索，不是实时招聘排行榜。
 
-2026-11-06 已追加 **156 道、11 个专项**，当前共 **1,156 道、29 类**，包括 AG-UI/A2UI/MCP Apps、WebMCP、ACP、DBOS、Agent Lightning、AP2、MCP 高级能力、RLM、CodeAct、Deep Agents 和 Mem0/Letta。真实数据/向量验收 32/32、终端本地 RAG E2E 7/7 通过，原 1,000 题逐题保持不变；完整边界与来源见 [HOTSPOT_EXPANSION_REPORT.md](HOTSPOT_EXPANSION_REPORT.md)。
+2026-11-06 首轮追加 **156 道、11 个专项**，当时共 **1,156 道、29 类**，包括 AG-UI/A2UI/MCP Apps、WebMCP、ACP、DBOS、Agent Lightning、AP2、MCP 高级能力、RLM、CodeAct、Deep Agents 和 Mem0/Letta。该轮真实数据/向量验收 32/32、终端本地 RAG E2E 7/7 通过，原 1,000 题逐题保持不变；完整边界与来源见 [HOTSPOT_EXPANSION_REPORT.md](HOTSPOT_EXPANSION_REPORT.md)。
+
+随后针对 Microsoft Agent Framework、CrewAI、learn-claude-code 与 Harness 实现级缺口，新增 **168 道、13 个专项**，当前正式题库为 **1,324 道、42 类**。新增 14 个来源、126 份正文、3,570 个切片；原 1,156 条完整记录未改。模型核验后额外剔除 9 道过度推断、接口混写或语义重复的题，真实数据/向量/检索校验 **39/39**、真实 CrewAI 终端 E2E **7/7** 通过，离线回归 **151 passed、6 skipped**。包括 Prompt Cache、权限与审批、成本护栏、GraphRAG、Agentic RAG、分层记忆，以及两种不同 ACP 的协议边界。详见 [HARNESS_GAP_REPORT.md](HARNESS_GAP_REPORT.md) 与 [本轮新增题](data/bank/harness-gap-expansion-20261106/questions.md)。
 
 ```bash
 # 首次调研必须使用新目录，已有 baseline 不覆盖；Knowledge-Assistant 只读检索：
@@ -162,6 +164,8 @@ uv run iqb bank search -q "AG-UI 共享状态" --topic agent_ui
 `--per-facet` 是每个具体子方向单次补题的预算，不是全库上限。模型生成与逐题核验分开调用；不足、失败、重复题均不强行补齐，缺口保存在 `build.json` 的 `unfilled`。生成用选定来源中的新鲜正文，仍经过真实 Milvus + BM25/RRF + Reranker；不会用搜索摘要、目录推荐语或历史生成答案作依据。所有写入串行执行，以上命令不能与其他写入操作并发。
 
 采集器记录 API 真实限流，允许读取正常公开页面中的固定 commit 和关联正文，不绕过验证码或登录。目录/文件读取失败和未知许可证如实记录；没有取得全文的资料不作为答案证据。`research.json` 保存原题 ID 与本地混合检索轨迹，`imports.json` 保存采集结果，`questions.jsonl` / `questions.md` 只导出本次新增题，`validation.json` / `retrieval-examples.json` 保存真实向量验收与专项检索样例。完整当前题库通过 `iqb bank export` 导出。
+
+Harness 专项使用 `config/harness_gaps_20261106.json` 与 `scripts/research_harness_gaps.py`，复跑命令及显式审查流程见专项报告。基线用完整数据库记录哈希校验，不额外导出一份整库副本。Python 源码以标准库 `ast` 划分符号边界，避免本轮遇到的原生分片崩溃；只解析，不执行仓库源码。
 
 ## 数据与缓存
 

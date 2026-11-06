@@ -1,0 +1,352 @@
+{
+  "version": "harness-gaps-20261106-v1",
+  "semantic_duplicate_threshold": 0.93,
+  "description": "指定框架及 Harness 实现级缺口补题；不设全库目标，不重分旧题。固定 commit，版本/提案/教学实现边界必须保留。",
+  "repositories": [
+    {
+      "repo": "i-am-bee/acp",
+      "query": "communication protocol architecture agent run lifecycle A2A",
+      "include": "^docs/(about|core-concepts)/.*\\.mdx$",
+      "max_documents": 5,
+      "paths": [
+        "docs/about/mcp-and-a2a.mdx", "docs/core-concepts/architecture.mdx",
+        "docs/core-concepts/agent-run-lifecycle.mdx", "docs/core-concepts/distributed-sessions.mdx"
+      ]
+    },
+    {
+      "repo": "a2aproject/A2A",
+      "query": "agent discovery task lifecycle MCP protocol",
+      "include": "^docs/topics/.*\\.md$",
+      "max_documents": 5,
+      "paths": [
+        "docs/topics/a2a-and-mcp.md", "docs/topics/agent-discovery.md",
+        "docs/topics/key-concepts.md", "docs/topics/life-of-a-task.md"
+      ]
+    },
+    {
+      "repo": "microsoft/agent-framework",
+      "query": "agent context workflow approval tools middleware skills tracing",
+      "include": "^docs/(decisions|specs)/.*\\.md$",
+      "max_documents": 23,
+      "paths": [
+        "docs/FAQS.md",
+        "docs/decisions/0001-agent-run-response.md",
+        "docs/decisions/0002-agent-tools.md",
+        "docs/decisions/0003-agent-opentelemetry-instrumentation.md",
+        "docs/decisions/0006-userapproval.md",
+        "docs/decisions/0007-agent-filtering-middleware.md",
+        "docs/decisions/0016-python-context-middleware.md",
+        "docs/decisions/0018-agentthread-serialization.md",
+        "docs/decisions/0019-python-context-compaction-strategy.md",
+        "docs/decisions/0022-chat-history-persistence-consistency.md",
+        "docs/decisions/0024-prompt-injection-defense.md",
+        "docs/decisions/0029-mcp-skill-templates-and-direct-references.md",
+        "docs/decisions/0035-dotnet-agent-hooks-enforcement.md",
+        "docs/decisions/0037-agent-skills-design.md",
+        "docs/specs/004-python-function-calling-loop.md",
+        "docs/features/durable-agents/README.md",
+        "dotnet/samples/03-workflows/README.md",
+        "dotnet/samples/03-workflows/Agents/GroupChatToolApproval/README.md",
+        "dotnet/samples/02-agents/AgentSkills/README.md",
+        "dotnet/samples/02-agents/Agents/Agent_Step18_CompactionPipeline/README.md"
+      ]
+    },
+    {
+      "repo": "crewAIInc/crewAI",
+      "query": "crews flows memory checkpointing guardrails replay hooks",
+      "include": "^docs/v1.15.36/en/.*\\.mdx$",
+      "max_documents": 23,
+      "paths": [
+        "docs/v1.15.36/en/concepts/agents.mdx",
+        "docs/v1.15.36/en/concepts/crews.mdx",
+        "docs/v1.15.36/en/concepts/flows.mdx",
+        "docs/v1.15.36/en/concepts/checkpointing.mdx",
+        "docs/v1.15.36/en/concepts/tasks.mdx",
+        "docs/v1.15.36/en/concepts/processes.mdx",
+        "docs/v1.15.36/en/concepts/memory.mdx",
+        "docs/v1.15.36/en/concepts/knowledge.mdx",
+        "docs/v1.15.36/en/concepts/skills.mdx",
+        "docs/v1.15.36/en/concepts/tools.mdx",
+        "docs/v1.15.36/en/concepts/event-listener.mdx",
+        "docs/v1.15.36/en/concepts/planning.mdx",
+        "docs/v1.15.36/en/learn/hierarchical-process.mdx",
+        "docs/v1.15.36/en/learn/human-in-the-loop.mdx",
+        "docs/v1.15.36/en/learn/human-feedback-in-flows.mdx",
+        "docs/v1.15.36/en/learn/execution-boundary-hooks.mdx",
+        "docs/v1.15.36/en/learn/tool-hooks.mdx",
+        "docs/v1.15.36/en/learn/llm-hooks.mdx",
+        "docs/v1.15.36/en/learn/replay-tasks-from-latest-crew-kickoff.mdx",
+        "docs/v1.15.36/en/learn/a2a-agent-delegation.mdx",
+        "docs/v1.15.36/en/guides/flows/mastering-flow-state.mdx"
+      ]
+    },
+    {
+      "repo": "shareAI-lab/learn-claude-code",
+      "query": "agent loop tools context compact task teams isolation",
+      "include": "^docs/zh/s\\d+.*\\.md$",
+      "max_documents": 13,
+      "paths": [
+        "docs/zh/s01-the-agent-loop.md",
+        "docs/zh/s02-tool-use.md",
+        "docs/zh/s03-todo-write.md",
+        "docs/zh/s04-subagent.md",
+        "docs/zh/s05-skill-loading.md",
+        "docs/zh/s06-context-compact.md",
+        "docs/zh/s07-task-system.md",
+        "docs/zh/s08-background-tasks.md",
+        "docs/zh/s09-agent-teams.md",
+        "docs/zh/s10-team-protocols.md",
+        "docs/zh/s11-autonomous-agents.md",
+        "docs/zh/s12-worktree-task-isolation.md"
+      ]
+    },
+    {
+      "repo": "microsoft/graphrag",
+      "query": "index entity community report local global drift",
+      "include": "^docs/(index|query)/.*\\.md$",
+      "max_documents": 9,
+      "paths": [
+        "docs/index/architecture.md",
+        "docs/index/default_dataflow.md",
+        "docs/index/methods.md",
+        "docs/index/outputs.md",
+        "docs/query/global_search.md",
+        "docs/query/local_search.md",
+        "docs/query/drift_search.md",
+        "docs/query/question_generation.md"
+      ]
+    },
+    {
+      "repo": "HKUDS/LightRAG",
+      "query": "query retrieval graph embedding rerank",
+      "include": "^docs/.*\\.md$",
+      "max_documents": 4,
+      "paths": ["docs/ProgramingWithCore.md", "docs/RoleSpecificLLMConfiguration.md", "docs/AsymmetricEmbedding.md"]
+    },
+    {
+      "repo": "openai/openai-agents-python",
+      "query": "guardrails human approval sandbox usage session trace retry tools",
+      "include": "^docs/.*\\.md$",
+      "max_documents": 15,
+      "paths": [
+        "docs/context.md", "docs/guardrails.md", "docs/human_in_the_loop.md",
+        "docs/running_agents.md", "docs/tools.md", "docs/tracing.md", "docs/usage.md",
+        "docs/handoffs.md", "docs/mcp.md", "docs/sessions/index.md",
+        "docs/sessions/advanced_sqlite_session.md", "docs/sandbox/guide.md",
+        "docs/sandbox/memory.md", "docs/testing.md"
+      ]
+    },
+    {
+      "repo": "anthropics/claude-agent-sdk-python",
+      "query": "permission tool callback hooks session",
+      "include": "^examples/.*\\.py$",
+      "max_documents": 4,
+      "paths": ["examples/hooks.py", "examples/tool_permission_callback.py", "examples/session_stores/README.md"]
+    },
+    {
+      "repo": "microsoft/LLMLingua",
+      "query": "compression token preservation evaluation",
+      "include": "^experiments/llmlingua2/.*README.md$",
+      "max_documents": 3,
+      "paths": ["experiments/llmlingua2/README.md", "experiments/llmlingua2/data_collection/README.md"]
+    },
+    {
+      "repo": "anthropics/anthropic-sdk-python",
+      "query": "cache control ephemeral usage tokens",
+      "include": "^src/anthropic/types/(cache_control|usage).*\\.py$",
+      "max_documents": 4,
+      "paths": [
+        "src/anthropic/types/cache_control_ephemeral_param.py",
+        "src/anthropic/types/usage.py",
+        "src/anthropic/types/message_create_params.py"
+      ]
+    },
+    {
+      "repo": "langchain-ai/docs",
+      "query": "agentic rag context memory interrupt persistence time travel middleware",
+      "include": "^src/oss/(langchain|langgraph)/.*\\.mdx$",
+      "max_documents": 12,
+      "paths": [
+        "src/oss/langchain/context-engineering.mdx",
+        "src/oss/langchain/long-term-memory.mdx",
+        "src/oss/langchain/short-term-memory.mdx",
+        "src/oss/langchain/middleware/built-in.mdx",
+        "src/oss/langchain/retrieval.mdx",
+        "src/oss/langgraph/add-memory.mdx",
+        "src/oss/langgraph/agentic-rag.mdx",
+        "src/oss/langgraph/interrupts.mdx",
+        "src/oss/langgraph/persistence.mdx",
+        "src/oss/langgraph/use-time-travel.mdx"
+      ]
+    },
+    {
+      "repo": "volcengine/OpenViking",
+      "query": "memory session retrieval context consolidation",
+      "include": "^docs/en/(concepts|api|context-compilation)/.*\\.md$",
+      "max_documents": 9,
+      "paths": [
+        "docs/en/concepts/00-overview.md", "docs/en/concepts/07-retrieval.md",
+        "docs/en/concepts/08-session.md", "docs/en/api/05-sessions.md",
+        "docs/en/api/06-retrieval.md", "docs/en/api/16-memory.md",
+        "docs/en/context-compilation/01-overview.md",
+        "docs/en/context-compilation/06-memory-consolidation.md"
+      ]
+    }
+  ],
+  "web_sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md"],
+  "topics": [
+    {
+      "id": "harness_protocol_migration", "name": "Harness 协议边界与 ACP/A2A 迁移", "hot": true,
+      "keywords": ["ACP", "A2A", "协议"],
+      "repos": ["i-am-bee/acp", "a2aproject/A2A"],
+      "existing_sources": ["https://github.com/zed-industries/agent-client-protocol"],
+      "guidance": "ACP 在这里专指 Agent Communication Protocol，不是 Agent Client Protocol；旧 ACP 已并入 A2A 的状态以 README 为准。历史机制明确标注为历史，不建议当作新的稳定接入目标。",
+      "facets": [
+        "Agent Communication Protocol 的历史定位、并入 A2A 状态与同名 Agent Client Protocol 的区别",
+        "A2A Agent Card、能力发现与 MCP 工具协议的职责边界",
+        "A2A Task、Message、Artifact 的生命周期与长任务流式更新边界",
+        "历史 Agent Communication Protocol 的 run/session 状态与迁移 A2A 时的语义边界"
+      ]
+    },
+    {
+      "id": "ms_agent_framework", "name": "Microsoft Agent Framework", "hot": true,
+      "keywords": ["Agent Framework", "微软 Agent"], "repos": ["microsoft/agent-framework"],
+      "guidance": "ADR 的 Proposed/Accepted 与已实现功能必须区分；不同语言 API 不混用。",
+      "facets": [
+        "Microsoft Agent Framework 的 Agent 与 Workflow 边界及 Python/.NET 运行形态",
+        "Microsoft Agent Framework 的运行响应、流式事件与函数调用循环",
+        "Microsoft Agent Framework 的上下文 middleware 与 session/thread 序列化",
+        "Microsoft Agent Framework 的 compaction 策略与聊天历史一致性",
+        "Microsoft Agent Framework 的 user approval 与 group chat 工具审批",
+        "Microsoft Agent Framework 的 OpenTelemetry instrumentation 与 middleware"
+      ]
+    },
+    {
+      "id": "crewai_engineering", "name": "CrewAI Crews、Flows 与生产编排", "hot": true,
+      "keywords": ["CrewAI", "Crew"], "repos": ["crewAIInc/crewAI"],
+      "guidance": "依据仓库 v1.15.36 文档；不要把 edge 功能视为稳定版保证。",
+      "facets": [
+        "CrewAI v1.15.36 的 Crews 与 Flows 分工及生产编排",
+        "CrewAI v1.15.36 的 sequential 与 hierarchical process 和 manager",
+        "CrewAI v1.15.36 Task 结构化输出与 guardrail 校验边界",
+        "CrewAI v1.15.36 Flow 状态、路由与 checkpointing",
+        "CrewAI v1.15.36 knowledge 与 memory 的职责和生命周期",
+        "CrewAI v1.15.36 human feedback 与执行边界 hooks"
+      ]
+    },
+    {
+      "id": "learn_harness", "name": "learn-claude-code 教学 Harness", "hot": true,
+      "keywords": ["learn-claude-code"], "repos": ["shareAI-lab/learn-claude-code"],
+      "guidance": "必须说明是教学实现，不是 Claude Code 官方实现或生产安全保证；读取示例不代表执行代码。",
+      "facets": [
+        "learn-claude-code s01/s02 教学 Agent loop 与 tool_use 分发",
+        "learn-claude-code s03 TodoWrite 的计划约束与提醒机制",
+        "learn-claude-code s04 子 Agent 的上下文隔离与结果回传",
+        "learn-claude-code s05 Skill 渐进式加载与按需上下文",
+        "learn-claude-code s06 三层 context compaction 与 transcript 归档",
+        "learn-claude-code s07/s08 持久化任务依赖与后台任务通知",
+        "learn-claude-code s09/s10 队友邮箱与 shutdown/plan approval 协议",
+        "learn-claude-code s11/s12 自主领取任务与 worktree 隔离的安全边界"
+      ]
+    },
+    {
+      "id": "harness_context_impl", "name": "Harness 上下文装配与压缩实现", "hot": true,
+      "keywords": ["LLMLingua", "compaction", "middleware"],
+      "repos": ["microsoft/LLMLingua", "langchain-ai/docs", "microsoft/agent-framework"],
+      "facets": [
+        "LLMLingua 与 LLMLingua-2 的 prompt compression 机制及适用边界",
+        "LLMLingua-2 数据蒸馏、token 选择与信息保留评估",
+        "LangChain context engineering 中 system、messages、tools 与 runtime context 的动态装配",
+        "LangChain summarization middleware 与消息裁剪的工具调用配对约束"
+      ]
+    },
+    {
+      "id": "harness_prompt_cache", "name": "Harness Prompt Cache 与缓存观测", "hot": true,
+      "keywords": ["cache_control", "Prompt Cache", "缓存"],
+      "repos": ["anthropics/anthropic-sdk-python", "openai/openai-agents-python"],
+      "web_sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md"],
+      "facets": [
+        "Anthropic Prompt Cache 的 cache_control 断点、前缀顺序与缓存失效边界",
+        "Anthropic SDK ephemeral cache 的 ttl 与创建/读取 token usage 统计",
+        "Prompt Cache 与应用答案缓存、上下文压缩的职责区别及成本核算"
+      ]
+    },
+    {
+      "id": "harness_tools_impl", "name": "Harness Tool Schema、Skills 与协议适配", "hot": true,
+      "keywords": ["工具", "Tool", "Skills", "MCP", "A2A"],
+      "repos": ["microsoft/agent-framework", "openai/openai-agents-python", "crewAIInc/crewAI"],
+      "facets": [
+        "OpenAI Agents SDK 的 function_tool JSON Schema 与 runtime context 注入",
+        "Microsoft Agent Framework 的 file/code/MCP skills 与渐进加载设计边界",
+        "CrewAI v1.15.36 A2A delegation 的能力发现与委派边界",
+        "OpenAI Agents SDK MCP tool filtering 与 server 生命周期、调用权限边界"
+      ]
+    },
+    {
+      "id": "harness_permissions", "name": "Harness 权限分级与审批实现", "hot": true,
+      "keywords": ["permission", "审批", "权限"],
+      "repos": ["anthropics/claude-agent-sdk-python", "openai/openai-agents-python", "crewAIInc/crewAI"],
+      "facets": [
+        "Claude Agent SDK permission_mode 与 can_use_tool callback 的允许、拒绝及参数改写",
+        "Claude Agent SDK PreToolUse hooks 与权限回调的执行边界，不能当作完整沙箱",
+        "OpenAI Agents SDK needs_approval、中断结果与批准/拒绝后恢复执行",
+        "CrewAI tool hooks 的执行前阻断与敏感工具审批边界"
+      ]
+    },
+    {
+      "id": "harness_reliability_impl", "name": "Harness Sandbox、Retry 与 Cost Guard 实现", "hot": true,
+      "keywords": ["guardrail", "retry", "budget", "usage", "Sandbox"],
+      "repos": ["openai/openai-agents-python", "langchain-ai/docs", "crewAIInc/crewAI"],
+      "facets": [
+        "OpenAI Agents SDK sandbox session、文件系统与执行隔离责任",
+        "LangChain middleware 的 model/tool retry 与失败后的恢复边界",
+        "LangChain model/tool call limit middleware 的 hard limit 和停止策略",
+        "OpenAI Agents SDK usage 与 max_turns 的成本观测及预算强制边界"
+      ]
+    },
+    {
+      "id": "harness_trace_replay", "name": "Harness Trace、Replay 与状态分叉", "hot": true,
+      "keywords": ["Trace", "replay", "time travel", "回放"],
+      "repos": ["openai/openai-agents-python", "langchain-ai/docs", "crewAIInc/crewAI"],
+      "facets": [
+        "OpenAI Agents SDK trace/span 的工具与多 Agent 关联、敏感数据控制",
+        "LangGraph time travel 的 checkpoint replay、fork 与外部副作用边界",
+        "CrewAI v1.15.36 replay latest kickoff 的任务起点、输入与记录约束"
+      ]
+    },
+    {
+      "id": "graphrag_impl", "name": "GraphRAG 索引与查询机制", "hot": true,
+      "keywords": ["GraphRAG", "LightRAG", "DRIFT"],
+      "repos": ["microsoft/graphrag", "HKUDS/LightRAG"],
+      "facets": [
+        "Microsoft GraphRAG 实体关系提取、社区发现与 community reports 索引流水线",
+        "Microsoft GraphRAG local search 的图邻域与文本上下文组合",
+        "Microsoft GraphRAG global search 的社区报告 map-reduce 与成本边界",
+        "Microsoft GraphRAG DRIFT 的初始全局信息、局部扩展与问题生成",
+        "LightRAG 的 local/global/hybrid/mix 查询模式与图、向量和 rerank 的边界"
+      ]
+    },
+    {
+      "id": "agentic_rag_impl", "name": "Agentic RAG 路由与证据反馈闭环", "hot": true,
+      "keywords": ["Agentic RAG", "检索", "retrieval"],
+      "repos": ["langchain-ai/docs"],
+      "facets": [
+        "LangGraph Agentic RAG 的 retriever tool、tools_condition 与直接回答路由",
+        "LangGraph Agentic RAG 的文档相关性 grade_documents 和 query rewrite",
+        "LangGraph Agentic RAG 中 rewrite、re-retrieve、generate 的状态流与终止限制",
+        "LangChain retrieval 文档中 two-step、agentic 与 hybrid RAG 的控制和延迟取舍"
+      ]
+    },
+    {
+      "id": "harness_memory_recall", "name": "Harness 分层记忆与召回实现", "hot": true,
+      "keywords": ["OpenViking", "memory", "记忆"],
+      "repos": ["volcengine/OpenViking", "langchain-ai/docs"],
+      "facets": [
+        "OpenViking 的文件系统式上下文组织与 L0/L1/L2 按需加载",
+        "OpenViking 目录递归检索与 find/search 的上下文依赖区别",
+        "OpenViking session commit、记忆提取与 memory consolidation 的生命周期",
+        "LangGraph store 的 namespace 作用域、语义检索与 checkpoint 短期状态区别"
+      ]
+    }
+  ]
+}

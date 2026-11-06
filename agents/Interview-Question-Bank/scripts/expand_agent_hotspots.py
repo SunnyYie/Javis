@@ -59,6 +59,16 @@ def summarize_checks(checks):
     )
 
 
+def catalog_digests(db):
+    return {
+        row[0]: digest(list(row))
+        for row in db.execute(
+            "SELECT r.*,c.* FROM question_records r "
+            "JOIN question_catalog c ON c.question_id=r.id ORDER BY r.id"
+        )
+    }
+
+
 def selected_paths(entries, include, query, limit=6):
     words = query.lower().split()
     docs = [
@@ -71,6 +81,25 @@ def selected_paths(entries, include, query, limit=6):
     readme = next((e["path"] for e in entries if e["path"].lower() == "readme.md"), None)
     # Keep the official overview plus topical bodies, not just repository home pages.
     return list(dict.fromkeys(([readme] if readme else []) + docs))[:limit]
+
+
+def repository_paths(entries, spec, max_file_bytes):
+    limit = spec.get("max_documents", 6)
+    if type(limit) is not int or not 1 <= limit <= 30:
+        raise ValueError("Repository document budget must be 1-30.")
+    if not spec.get("paths"):
+        return selected_paths(entries, spec["include"], spec["query"], limit)
+    available = {
+        e["path"] for e in entries if e["type"] == "blob"
+        and e.get("mode") != "120000" and e.get("size", 0) <= max_file_bytes
+    }
+    if not set(spec["paths"]) <= available:
+        raise ValueError("Requested documents missing or exceed safety limits.")
+    readme = next((p for p in available if p.lower() == "readme.md"), None)
+    paths = list(dict.fromkeys(([readme] if readme else []) + spec["paths"]))
+    if len(paths) > limit:
+        raise ValueError("Requested documents exceed the declared budget.")
+    return paths
 
 
 def public_metadata(http, source):
@@ -173,6 +202,9 @@ def collect(output, plan):
         source = "https://github.com/" + spec["repo"]
         if source in successful:
             continue
+        report["in_progress"] = dict(source=source, stage="github_api")
+        save(report_path, report)
+        print(json.dumps(report["in_progress"]), flush=True)
         try:
             if report.get("api_rate_limited"):
                 raise RuntimeError("API quota already exhausted in this run")
@@ -183,12 +215,14 @@ def collect(output, plan):
             tree = github.api(f"repos/{spec['repo']}/git/trees/{revision}?recursive=1")
             if tree.get("truncated"):
                 raise ValueError("Truncated public repository tree")
-            paths = selected_paths(tree.get("tree", []), spec["include"], spec["query"])
+            paths = repository_paths(tree.get("tree", []), spec, settings.max_file_bytes)
             if not paths:
                 raise ValueError("No relevant public documents")
             license_id = (info.get("license") or {}).get("spdx_id") or "unknown"
             docs = []
             for path in paths:
+                report["in_progress"] = dict(source=source, stage="fetch_body", path=path)
+                save(report_path, report)
                 text = http.text(
                     f"https://raw.githubusercontent.com/{spec['repo']}/{revision}/{quote(path)}",
                     max_bytes=settings.max_file_bytes,
@@ -198,12 +232,17 @@ def collect(output, plan):
                     text=text, path=path, repo=spec["repo"], commit=revision,
                     license=license_id, role="project",
                 ))
+            report["in_progress"] = dict(source=source, stage="vectorize_publish",
+                                         documents=len(docs))
+            save(report_path, report)
+            print(json.dumps(report["in_progress"]), flush=True)
             result = knowledge.ingest(Bundle(
                 source, docs, dict(selected=paths, partial=True, topic_query=spec["query"]),
                 repo=spec["repo"], commit=revision,
             ))
             entry = dict(
                 source=source, status="stored", repo=spec["repo"], commit=revision,
+                acquisition="github_api",
                 license=license_id, stars=info["stargazers_count"],
                 pushed_at=info.get("pushed_at"), paths=paths, **result,
             )
@@ -229,6 +268,7 @@ def collect(output, plan):
                 entry = dict(source=source, status="failed", error=type(fallback).__name__,
                              category=getattr(fallback, "category", None))
         report["attempts"].append(dict(at=time.time(), **entry))
+        report["in_progress"] = None
         save(report_path, report)
         print(json.dumps(entry, ensure_ascii=False), flush=True)
     for url in plan["web_sources"]:
@@ -270,6 +310,23 @@ class ScopedStore:
                 if c.source in self.sources and c.expires_at > time.time()]
 
 
+def include_document_status(chunks, active):
+    selected = {(c.source, c.path) for c in chunks}
+    sources = {c.source for c in chunks}
+    headers = [
+        c for c in active
+        if (
+            (c.source, c.path) in selected and c.start <= 20
+            and re.search(r"(?mi)^status:\s*\S+", c.text)
+        ) or (
+            c.source in sources and c.path.lower() == "readme.md" and c.start <= 100
+            and re.search(r"(?i)merged|archived|retired|deprecated|part of.*A2A", c.text)
+        )
+    ]
+    seen = {c.id for c in chunks}
+    return chunks + [c for c in headers if c.id not in seen]
+
+
 def export_added(output, bank, baseline):
     rows = [r for r in bank.rows() if r["id"] not in baseline]
     (output / "questions.jsonl").write_text("".join(
@@ -307,6 +364,8 @@ def build(output, plan, workers=4, per_facet=4, retries=2):
     if (report["plan_version"] != plan["version"] or report["per_facet"] != per_facet
             or report["plan_digest"] != digest(plan)):
         raise ValueError("Resume settings differ from the saved expansion.")
+    if report.get("manual_review"):
+        raise ValueError("Reviewed expansion is closed; use a new output and baseline.")
     # No global target or reclassification: existing questions and quotas remain untouched.
     for topic in plan["topics"]:
         topic["quota"] = float("inf")
@@ -319,11 +378,14 @@ def build(output, plan, workers=4, per_facet=4, retries=2):
         t["id"]: Knowledge(
             retrieval_settings,
             ScopedStore(bank.store, ["https://github.com/" + r for r in t["repos"]]
-                        + t.get("web_sources", [])),
+                        + t.get("web_sources", []) + t.get("existing_sources", [])),
             embeddings=bank.embeddings, index=shared.index, reranker=shared.reranker,
         ) for t in plan["topics"]
     }
     pools = {}
+    active_evidence = [
+        c for c in bank.store.active_chunks() if c.expires_at > time.time()
+    ]
 
     def checkpoint():
         added = export_added(output, bank, baseline)
@@ -383,9 +445,12 @@ def build(output, plan, workers=4, per_facet=4, retries=2):
                             consume(next(as_completed(futures)))
                         if key not in pools:
                             retriever = retrievers[topic["id"]]
-                            pools[key] = retriever.retrieve(facet, k=12)
+                            retrieved = retriever.retrieve(facet, k=12)
+                            pools[key] = include_document_status(retrieved, active_evidence)
                             report["retrieval"].append(dict(
                                 topic=topic["id"], facet=facet, trace=retriever.last_trace,
+                                provenance_ids=[c.id for c in pools[key]
+                                                if c.id not in {r.id for r in retrieved}],
                             ))
                             checkpoint()
                         chunks = pools[key]
@@ -400,7 +465,8 @@ def build(output, plan, workers=4, per_facet=4, retries=2):
                         request = InterviewRequest(
                             topic=topic["name"],
                             query=facet + "。标题明确点出具体协议或项目，重点考察机制与工程边界。"
-                            "资料中的草案、实验性和版本限制必须如实标明，不能宣称已稳定支持。",
+                            "资料中的草案、实验性和版本限制必须如实标明，不能宣称已稳定支持。"
+                            + topic.get("guidance", ""),
                             knowledge_points=[facet], count=gap, excluded_titles=existing,
                         )
                         future = executor.submit(generate_batch, settings, request, chunks)
@@ -460,9 +526,14 @@ def validate(output, plan, baseline_export=None):
         facet_counts[(batch["topic"], batch["facet"])] += batch["added"]
     checks = dict(
         baseline_preserved=baseline <= by_id.keys(),
+        all_published_citations_active=all(r["citations_active"] for r in rows),
         bank_exceeds_1000=len(rows) > 1000,
         all_new_citations_active=bool(new) and all(r["citations_active"] for r in new),
         all_new_verified=bool(new) and all(r["review"] == "llm_verified" for r in new),
+        kept_batches_match_published_questions=(
+            {qid for batch in build_report["batches"] for qid in batch["ids"]}
+            == {r["id"] for r in new}
+        ),
         all_new_answers_present=all(r["answer"] and r["key_points"] for r in new),
         original_quotes_valid=all(
             r["origin"] != "来源原题" or (
@@ -488,6 +559,15 @@ def validate(output, plan, baseline_export=None):
             for r in build_report["retrieval"]
         ),
     )
+    baseline_digests = json.loads((output / "research.json").read_text())[
+        "baseline"
+    ].get("record_digests")
+    if baseline_digests:
+        current = catalog_digests(bank.store.db)
+        checks["baseline_records_unchanged"] = (
+            set(baseline_digests) == baseline
+            and all(current.get(key) == value for key, value in baseline_digests.items())
+        )
     if baseline_export:
         previous = [json.loads(line) for line in baseline_export.read_text().splitlines()]
         checks["baseline_records_unchanged"] = (
@@ -496,6 +576,14 @@ def validate(output, plan, baseline_export=None):
             and all(by_id.get(r["id"]) == r for r in previous)
         )
     active = {c.id: c for c in bank.store.active_chunks()}
+    planned = [s for s in plan["repositories"] if s.get("paths")]
+    if planned:
+        checks["all_planned_documents_ingested"] = all(
+            set(spec["paths"]) <= {
+                c.path for c in active.values()
+                if c.source == "https://github.com/" + spec["repo"]
+            } for spec in planned
+        )
     checks["citations_match_current_raw_text"] = all(
         set(r["evidence_ids"]) == {c["id"] for c in r["citations"]}
         and all(c["id"] in active and c["text"] == active[c["id"]].text
@@ -517,6 +605,16 @@ def validate(output, plan, baseline_export=None):
             output_fields=["id", "vector"], consistency_level="Strong", timeout=30,
         ))
     checks["all_published_vectors_present"] = {r["id"] for r in stored} == set(by_id)
+    exclusions = output / "review-exclusions.json"
+    if exclusions.exists():
+        excluded_ids = [
+            r["question"]["id"] for r in json.loads(exclusions.read_text())
+        ]
+        checks["reviewed_questions_unpublished"] = not set(excluded_ids) & set(by_id)
+        checks["reviewed_vectors_removed"] = not bank.index._client.get(
+            bank.index._collection, ids=excluded_ids, output_fields=["id"],
+            consistency_level="Strong", timeout=30,
+        )
     sql = {r[0]: json.loads(r[1]) for r in bank.store.db.execute(
         "SELECT question_id,vector FROM question_catalog"
     )}
@@ -555,11 +653,11 @@ def validate(output, plan, baseline_export=None):
     return report
 
 
-def terminal_check(output):
+def terminal_check(output, query="给我 3 道 AG-UI 共享状态与事件协议的面试题"):
     started = time.monotonic()
     command = [
         str(ROOT / ".venv/bin/iqb"), "chat",
-        "-q", "给我 3 道 AG-UI 共享状态与事件协议的面试题",
+        "-q", query,
         "--local-only", "--json",
     ]
     try:
@@ -606,6 +704,7 @@ if __name__ == "__main__":
     parser.add_argument("--per-facet", type=int, choices=range(1, 11), default=4)
     parser.add_argument("--retries", type=int, choices=range(0, 6), default=2)
     parser.add_argument("--baseline-export", type=Path)
+    parser.add_argument("--query", default="给我 3 道 AG-UI 共享状态与事件协议的面试题")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     config = json.loads(args.plan.read_text())
@@ -616,6 +715,6 @@ if __name__ == "__main__":
     elif args.mode == "finalize":
         finalize(args.output)
     elif args.mode == "terminal":
-        raise SystemExit(0 if terminal_check(args.output)["passed"] else 1)
+        raise SystemExit(0 if terminal_check(args.output, args.query)["passed"] else 1)
     else:
         raise SystemExit(0 if validate(args.output, config, args.baseline_export)["passed"] else 1)

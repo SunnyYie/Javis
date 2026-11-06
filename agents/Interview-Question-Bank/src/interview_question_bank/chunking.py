@@ -1,3 +1,4 @@
+import ast
 import re
 from pathlib import PurePosixPath
 
@@ -29,6 +30,16 @@ def symbol_ranges(text: str, path: str) -> list[tuple[int, int]]:
                 in_fence = not in_fence
             if not in_fence and re.match(r"^#{1,6}\s", line):
                 boundaries.add(i)
+    elif suffix == ".py":
+        try:
+            tree = ast.parse(text)
+            for node in tree.body:
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    decorators = [d.lineno for d in node.decorator_list]
+                    boundaries.add(min([node.lineno, *decorators]) - 1)
+                    boundaries.add(min(node.end_lineno, len(lines)))
+        except (SyntaxError, ValueError):
+            pass
     elif suffix in LANGUAGES:
         from tree_sitter_language_pack import get_parser
 
