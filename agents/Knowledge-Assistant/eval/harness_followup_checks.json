@@ -1,0 +1,14 @@
+[
+  {
+    "topic": "memory_selection_focused",
+    "question": "根据 shareAI-lab/learn-claude-code 的 s09_memory/code.py，select_relevant_memories、keyword_memory_selection 和 load_memories 如何选择并加载记忆？说明模型选择失败时的回退以及每次加载的限制。",
+    "repo": "shareAI-lab/learn-claude-code",
+    "paths": ["s09_memory/code.py"]
+  },
+  {
+    "topic": "cost_enforcement",
+    "question": "根据 BerriAI/litellm 的 litellm/proxy/hooks/max_budget_per_session_limiter.py，async_pre_call_hook 如何检查会话预算并拦截调用？说明没有配置预算或 session_id 时的行为、成功调用后的费用记账，以及 Redis 不可用时的回退；不要把 SDK BudgetManager 记账当作该代理限额实现。",
+    "repo": "BerriAI/litellm",
+    "paths": ["litellm/proxy/hooks/max_budget_per_session_limiter.py"]
+  }
+]

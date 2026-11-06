@@ -81,10 +81,15 @@ uv run ka chat -q "LangChain 如何定义工具？" --local-only --json
 
 `--local-only` 只禁止 GitHub、搜索、网页及资料自动刷新，仍允许远程 LLM 调用。会话命令：`/new`、`/sessions`、`/resume ID`、`/sources`、`/help`、`/quit`。`Ctrl-C` 中断当前请求，不保存未完成回答；已经成功发布的来源索引不会回滚。
 
-`seed` 只在显式执行时导入 `seeds.json` 中的 13 个仓库：原有 11 个，加上
-`ai-boost/awesome-harness-engineering` 和 `infiniflow/ragflow`。awesome 清单标为第三方汇编，
-RAGFlow 标为项目自身材料。可编辑清单，或用 `ka seed --catalog /绝对路径/清单.json`。
+`seed` 只在显式执行时导入 `seeds.json` 中的 16 个仓库：原有 13 个，加上
+`microsoft/agent-framework`、`crewAIInc/crewAI` 和 `shareAI-lab/learn-claude-code`。
+awesome 清单标为第三方汇编，learn-claude-code 标为教程，其他项目自身材料单独标注。
+可编辑清单，或用 `ka seed --catalog /绝对路径/清单.json`。
 启动聊天不会自动扫描整个清单。
+
+Harness 专项补采的文件清单、缺口判断和复查方式见
+[HARNESS_KNOWLEDGE.md](HARNESS_KNOWLEDGE.md)；`harness-sources.json`
+由专项导入脚本处理，不会在聊天启动时自动导入。
 
 ## 检索和持久化
 
@@ -170,12 +175,13 @@ Markdown 按标题、代码按 Tree-sitter 符号边界切分，再使用模型 
 ## 测试
 
 测试代码、夹具与人工核对题位于 `tests/`，固定 RAGAs 题集位于 `eval/`。
-最新必要验收记录见 [data/acceptance/README.md](data/acceptance/README.md)；
-旧轮次产物、隔离测试库及工具缓存已清理，不作为运行测试的依赖。
+保留清单与清理范围见 [data/acceptance/README.md](data/acceptance/README.md)；
+历次验收生成输出与工具缓存已清理，只保留可复跑用例、题集和脚本。
+历史指标与失败摘要留在验收文档中，不代表旧原始文件仍可读取。
 
 ```bash
-uv run pytest -q
-uv run ruff check src tests
+PYTHONDONTWRITEBYTECODE=1 uv run pytest -q -p no:cacheprovider
+uv run ruff check --no-cache src tests
 KA_BROWSER=1 uv run pytest -q tests/test_live.py::test_real_browser_repository_body
 KA_BROWSER_REPO=1 uv run pytest -q tests/test_live.py::test_real_browser_repository_commit_and_source_lines
 KA_SERVICES=1 uv run pytest -q tests/test_live.py::test_real_milvus_embedding_redis_and_restart
@@ -190,7 +196,7 @@ KA_QA_LIVE=1 KA_EVIDENCE_DIR="$PWD/data/acceptance/手动指定的新目录" \
   uv run pytest -q -s tests/test_live.py::test_real_web_qa_cache_context_online_and_reuse
 ```
 
-普通测试使用明确标注的测试替身验证分支，不等于真实模型或 E2E。`KA_SERVICES=1` 使用真实 Embedding、Milvus、Redis，但输入为合成集成样本，不证明真实项目问答效果。`KA_LIVE=1` 用真实子进程导入当前全部 13 个精选清单的有限文件，验证本地、缓存、联网和再复用；缺少凭证或发生真实失败就失败，不降级为 mock。
+普通测试使用明确标注的测试替身验证分支，不等于真实模型或 E2E。`KA_SERVICES=1` 使用真实 Embedding、Milvus、Redis，但输入为合成集成样本，不证明真实项目问答效果。`KA_LIVE=1` 用真实子进程导入当前全部 16 个精选清单的有限文件，验证本地、缓存、联网和再复用；缺少凭证或发生真实失败就失败，不降级为 mock。
 `KA_RERANK=1` 下载并运行真实本地重排模型，但相关 / 无关输入仍为明确标注的合成探测样本。
 
 ## RAGAs 评估
@@ -240,7 +246,7 @@ API 错误、超时和 NaN 会保留为缺失并令命令退出 1，不改成零
 保存逐仓库的退出码、文件数、嵌入数、耗时和覆盖清单，并校验固定 commit / 文件 / 行号引用。
 默认每仓库 6 个文件、3 个目录页，这是明确限定范围的小批量入库，不是全仓索引；用新证据目录重跑可调整限额。
 
-`KA_QA_LIVE=1` 单独验证真实官方网页入库后的问答闭环，不替代 13 仓库导入验收：
+`KA_QA_LIVE=1` 单独验证真实官方网页入库后的问答闭环，不替代精选清单导入验收：
 重复导入零嵌入、本地充分命中、不可用模型/向量地址下的 Redis 缓存命中、上下文追问、
 本地证据不足、Tavily 联网补充、新会话 `--local-only` 复用、知识版本更新后的缓存失效及真实终端操作。
 逐条命令、退出码、耗时、回答和引用保存在指定目录。每次应指定新目录，避免旧知识干扰。

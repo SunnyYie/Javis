@@ -215,11 +215,11 @@ def test_browser_disabled_is_explicit_and_code_search_does_not_fake_no_results(e
         c.targeted_paths("owner/repo", "query")
 
 
-def test_new_catalog_has_thirteen_repos_and_scoped_large_readme_exception(env):
+def test_catalog_has_sixteen_repos_and_scoped_large_readme_exception(env):
     import json
 
     rows = json.loads(env.s.seeds_file.read_text())
-    assert len(rows) == len({r["repo"] for r in rows}) == 13
+    assert len(rows) == len({r["repo"] for r in rows}) == 16
     awesome = next(r for r in rows if r["repo"] == "ai-boost/awesome-harness-engineering")
     assert awesome["role"] == "third_party" and awesome["max_file_bytes"] == 524288
     assert next(r for r in rows if r["repo"] == "infiniflow/ragflow")["role"] == "project"

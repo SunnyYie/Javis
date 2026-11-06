@@ -175,7 +175,7 @@ def chat(
             console.print()
 
 
-def ingest_one(url, role="unverified", max_file_bytes=None):
+def ingest_one(url, role="unverified", max_file_bytes=None, *, paths=None):
     s = get_settings()
     if max_file_bytes is not None:
         if not isinstance(max_file_bytes, int) or not 1 <= max_file_bytes <= s.max_repo_bytes:
@@ -185,7 +185,7 @@ def ingest_one(url, role="unverified", max_file_bytes=None):
     try:
         bundle = Collectors(
             s, progress=lambda page: errors.print(f"浏览器读取: {page}", markup=False)
-        ).collect(url, role=role)
+        ).collect(url, role=role, paths=paths)
         result = Knowledge(s, store).ingest(bundle)
         console.print_json(
             data={
@@ -259,6 +259,7 @@ def sync(repo: Annotated[str | None, typer.Argument()] = None):
                 row["source"],
                 chunks[0].role if chunks else "unverified",
                 coverage.get("max_file_bytes"),
+                paths=coverage.get("selected") if coverage.get("targeted") else None,
             )
         except typer.Exit:
             failures += 1

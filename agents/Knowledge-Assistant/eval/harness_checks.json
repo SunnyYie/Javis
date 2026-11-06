@@ -1,0 +1,21 @@
+[
+  {"topic": "system_context", "question": "根据 microsoft/agent-framework 的资料，agent run context 与 middleware 上下文注入如何设计？请区分设计提案、语言与已采集的实现，不将提案视为已实现。", "repo": "microsoft/agent-framework", "paths": ["docs/decisions/0015-agent-run-context.md", "docs/decisions/0016-python-context-middleware.md"]},
+  {"topic": "memory_recall", "question": "shareAI-lab/learn-claude-code 的 memory selection、extraction、consolidation 以及历史记忆检索如何工作？", "repo": "shareAI-lab/learn-claude-code", "paths": ["s09_memory/README.md", "s09_memory/code.py"]},
+  {"topic": "retrieval", "question": "langchain-ai/docs 中如何将 retriever 包装成 agent 可以选择调用的检索工具？", "repo": "langchain-ai/docs", "paths": ["src/oss/langgraph/agentic-rag.mdx", "src/code-samples/langgraph/agentic-rag-tutorial.py"]},
+  {"topic": "context_compression", "question": "shareAI-lab/learn-claude-code 的 tool_result_budget、snip_compact、micro_compact 和 compact_history 有什么区别？", "repo": "shareAI-lab/learn-claude-code", "paths": ["s08_context_compact/README.md", "s08_context_compact/code.py"]},
+  {"topic": "prompt_cache", "question": "langchain-ai/docs 中 prompt caching 的 prompt_cache_key 和 prompt_cache_retention 如何配置？", "repo": "langchain-ai/docs", "paths": ["src/oss/langchain/models.mdx", "src/code-samples/langchain/openai-prompt-cache-options.py"]},
+  {"topic": "tool_schema", "question": "modelcontextprotocol/modelcontextprotocol 的 tools inputSchema、outputSchema 和工具结果有哪些约束？", "repo": "modelcontextprotocol/modelcontextprotocol", "paths": ["docs/specification/2026-07-28/server/tools.mdx"]},
+  {"topic": "mcp", "question": "modelcontextprotocol/modelcontextprotocol 的 host、client 和 server 分别负责什么？", "repo": "modelcontextprotocol/modelcontextprotocol", "paths": ["docs/specification/2026-07-28/architecture/index.mdx"]},
+  {"topic": "skills", "question": "agentskills/agentskills 的 SKILL.md frontmatter 和渐进式加载有哪些要求？", "repo": "agentskills/agentskills", "paths": ["docs/specification.mdx"]},
+  {"topic": "a2a", "question": "a2aproject/A2A 的 Agent Card、任务生命周期及它与 MCP 的职责差别是什么？", "repo": "a2aproject/A2A", "paths": ["docs/topics/a2a-and-mcp.md", "docs/topics/key-concepts.md", "docs/topics/agent-discovery.md"]},
+  {"topic": "acp", "question": "agentclientprotocol/agent-client-protocol 中客户端如何处理工具调用权限与 agent 的信任边界？", "repo": "agentclientprotocol/agent-client-protocol", "paths": ["docs/protocol/v2/security.mdx", "docs/protocol/v2/tool-calls.mdx"]},
+  {"topic": "permissions", "question": "shareAI-lab/learn-claude-code 的 PermissionRule 如何区分 allow、ask 和 deny？", "repo": "shareAI-lab/learn-claude-code", "paths": ["s03_permission/README.md", "s03_permission/code.py"]},
+  {"topic": "sandbox", "question": "e2b-dev/E2B 如何创建隔离 sandbox，并设置生命周期或超时？", "repo": "e2b-dev/E2B", "paths": ["README.md", "packages/python-sdk/e2b/sandbox/main.py", "packages/python-sdk/e2b/sandbox_sync/main.py"]},
+  {"topic": "hitl", "question": "crewAIInc/crewAI 如何在 flow 中暂停并收集 human-in-the-loop 审批或反馈？", "repo": "crewAIInc/crewAI", "paths": ["docs/edge/en/learn/human-in-the-loop.mdx", "docs/edge/en/learn/human-feedback-in-flows.mdx"]},
+  {"topic": "retry", "question": "langchain-ai/langgraph 的 RetryPolicy 和任务重试如何配置最大尝试次数与退避？", "repo": "langchain-ai/langgraph", "paths": ["libs/langgraph/langgraph/types.py", "libs/langgraph/langgraph/pregel/_retry.py"]},
+  {"topic": "cost_guard", "question": "BerriAI/litellm 的 BudgetManager 如何检查剩余预算并更新用户调用费用？", "repo": "BerriAI/litellm", "paths": ["litellm/budget_manager.py"]},
+  {"topic": "trace_observability", "question": "crewAIInc/crewAI 如何开启 tracing 并查看 agent 执行中的可观测信息？", "repo": "crewAIInc/crewAI", "paths": ["docs/edge/en/observability/tracing.mdx", "docs/edge/en/observability/overview.mdx"]},
+  {"topic": "replay", "question": "langchain-ai/docs 中 LangGraph 使用 checkpoint 进行 time travel 和 replay 时，哪些代码可能重新执行？", "repo": "langchain-ai/docs", "paths": ["src/oss/langgraph/use-time-travel.mdx", "src/oss/langgraph/persistence.mdx"]},
+  {"topic": "graphrag", "question": "microsoft/graphrag 的 local search 与 global search 分别使用哪些知识图谱和社区报告上下文？", "repo": "microsoft/graphrag", "paths": ["docs/query/local_search.md", "docs/query/global_search.md", "docs/query/overview.md"]},
+  {"topic": "agentic_rag", "question": "langchain-ai/docs 的 Agentic RAG 如何判断检索结果相关性并改写问题再次检索？", "repo": "langchain-ai/docs", "paths": ["src/oss/langgraph/agentic-rag.mdx", "src/code-samples/langgraph/agentic-rag-tutorial.py"]}
+]

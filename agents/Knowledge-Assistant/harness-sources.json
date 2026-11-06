@@ -1,0 +1,180 @@
+[
+  {
+    "repo": "shareAI-lab/learn-claude-code",
+    "role": "tutorial",
+    "topics": ["system_context", "tool_schema", "permissions", "skills", "context_compression", "memory_recall", "mcp", "replay"],
+    "paths": [
+      "README.md",
+      "s02_tool_use/README.md",
+      "s02_tool_use/code.py",
+      "s03_permission/README.md",
+      "s03_permission/code.py",
+      "s07_skill_loading/README.md",
+      "s07_skill_loading/code.py",
+      "s08_context_compact/README.md",
+      "s08_context_compact/code.py",
+      "s09_memory/README.md",
+      "s09_memory/code.py",
+      "s14_mcp_plugin/README.md",
+      "s14_mcp_plugin/code.py",
+      "s16_workflow_runtime/README.md",
+      "s16_workflow_runtime/code.py"
+    ]
+  },
+  {
+    "repo": "microsoft/agent-framework",
+    "role": "project",
+    "topics": ["system_context", "context_compression", "memory_recall", "mcp", "skills", "hitl", "replay"],
+    "paths": [
+      "README.md",
+      "docs/decisions/0006-userapproval.md",
+      "docs/decisions/0015-agent-run-context.md",
+      "docs/decisions/0016-python-context-middleware.md",
+      "docs/decisions/0019-python-context-compaction-strategy.md",
+      "docs/decisions/0037-agent-skills-design.md",
+      "docs/decisions/0043-python-mcp-runtime-context.md",
+      "docs/features/durable-agents/README.md",
+      "python/packages/core/agent_framework/_compaction.py",
+      "python/packages/core/agent_framework/_harness/_file_memory.py",
+      "python/packages/core/agent_framework/_harness/_tool_approval.py"
+    ]
+  },
+  {
+    "repo": "crewAIInc/crewAI",
+    "role": "project",
+    "topics": ["memory_recall", "hitl", "retry", "trace_observability", "replay", "mcp", "sandbox"],
+    "paths": [
+      "README.md",
+      "docs/edge/en/concepts/agents.mdx",
+      "docs/edge/en/concepts/memory.mdx",
+      "docs/edge/en/learn/human-in-the-loop.mdx",
+      "docs/edge/en/learn/human-feedback-in-flows.mdx",
+      "docs/edge/en/learn/replay-tasks-from-latest-crew-kickoff.mdx",
+      "docs/edge/en/mcp/security.mdx",
+      "docs/edge/en/observability/overview.mdx",
+      "docs/edge/en/observability/tracing.mdx"
+    ]
+  },
+  {
+    "repo": "a2aproject/A2A",
+    "role": "project",
+    "topics": ["a2a", "mcp", "permissions"],
+    "paths": [
+      "README.md",
+      "docs/topics/a2a-and-mcp.md",
+      "docs/topics/key-concepts.md",
+      "docs/topics/agent-discovery.md",
+      "docs/topics/enterprise-ready.md"
+    ]
+  },
+  {
+    "repo": "agentclientprotocol/agent-client-protocol",
+    "role": "project",
+    "topics": ["acp", "permissions", "tool_schema"],
+    "paths": [
+      "README.md",
+      "docs/protocol/v2/overview.mdx",
+      "docs/protocol/v2/tool-calls.mdx",
+      "docs/protocol/v2/security.mdx"
+    ]
+  },
+  {
+    "repo": "i-am-bee/acp",
+    "role": "project",
+    "topics": ["acp", "a2a"],
+    "paths": ["README.md"]
+  },
+  {
+    "repo": "microsoft/graphrag",
+    "role": "project",
+    "topics": ["graphrag", "retrieval"],
+    "paths": [
+      "README.md",
+      "docs/query/overview.md",
+      "docs/query/local_search.md",
+      "docs/query/global_search.md",
+      "packages/graphrag/graphrag/query/structured_search/local_search/search.py"
+    ]
+  },
+  {
+    "repo": "langchain-ai/docs",
+    "role": "project",
+    "topics": ["agentic_rag", "retrieval", "hitl", "replay", "prompt_cache"],
+    "paths": [
+      "src/oss/langgraph/agentic-rag.mdx",
+      "src/code-samples/langgraph/agentic-rag-tutorial.py",
+      "src/oss/langgraph/persistence.mdx",
+      "src/oss/langgraph/interrupts.mdx",
+      "src/oss/langgraph/use-time-travel.mdx",
+      "src/oss/langchain/models.mdx",
+      "src/code-samples/langchain/openai-prompt-cache-options.py",
+      "src/code-samples/langchain/openai-prompt-cache-write-tokens.py"
+    ]
+  },
+  {
+    "repo": "langchain-ai/langgraph",
+    "role": "project",
+    "topics": ["retry", "replay", "hitl"],
+    "paths": [
+      "README.md",
+      "libs/langgraph/langgraph/_internal/_replay.py",
+      "libs/langgraph/langgraph/pregel/_retry.py",
+      "libs/langgraph/langgraph/types.py"
+    ]
+  },
+  {
+    "repo": "langchain-ai/deepagents",
+    "role": "project",
+    "topics": ["context_compression", "memory_recall", "permissions", "sandbox", "skills"],
+    "paths": [
+      "README.md",
+      "libs/deepagents/deepagents/middleware/summarization.py",
+      "libs/deepagents/deepagents/middleware/memory.py",
+      "libs/deepagents/deepagents/middleware/permissions.py",
+      "libs/deepagents/deepagents/backends/sandbox.py",
+      "libs/partners/quickjs/README.md"
+    ]
+  },
+  {
+    "repo": "e2b-dev/E2B",
+    "role": "project",
+    "topics": ["sandbox"],
+    "paths": [
+      "README.md",
+      "packages/python-sdk/e2b/sandbox/main.py",
+      "packages/python-sdk/e2b/sandbox_sync/main.py"
+    ]
+  },
+  {
+    "repo": "modelcontextprotocol/modelcontextprotocol",
+    "role": "project",
+    "topics": ["mcp", "tool_schema", "permissions"],
+    "paths": [
+      "README.md",
+      "docs/specification/2026-07-28/architecture/index.mdx",
+      "docs/specification/2026-07-28/server/tools.mdx",
+      "docs/specification/2026-07-28/basic/authorization/index.mdx",
+      "docs/specification/2026-07-28/basic/authorization/security-considerations.mdx"
+    ]
+  },
+  {
+    "repo": "agentskills/agentskills",
+    "role": "project",
+    "topics": ["skills"],
+    "paths": [
+      "README.md",
+      "docs/specification.mdx"
+    ]
+  },
+  {
+    "repo": "BerriAI/litellm",
+    "role": "project",
+    "topics": ["cost_guard"],
+    "paths": [
+      "README.md",
+      "litellm/budget_manager.py",
+      "litellm/proxy/hooks/max_budget_per_session_limiter.py",
+      "terraform/provider/docs/resources/budget.md"
+    ]
+  }
+]

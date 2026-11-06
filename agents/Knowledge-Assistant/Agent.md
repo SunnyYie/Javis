@@ -1,7 +1,7 @@
 # Knowledge-Assistant Agent 协作指南
 
 适用对象：调用本项目获取知识、采集资料或维护代码的其他 Agent。
-更新日期：2026-11-05。本文以当前源码为准；历史验收记录不代表当前服务健康。
+更新日期：2026-11-06。本文以当前源码为准；历史验收记录不代表当前服务健康。
 部分工具只自动读取 `AGENTS.md`，使用此类工具时应显式加载本文件。
 
 ## 1. 项目定位与硬性约束
@@ -108,8 +108,13 @@ uv run ka sync
 uv run ka seed
 ```
 
-- `seeds.json` 包含用户指定的 13 个仓库，不擅自替换或扩大。
+- `seeds.json` 包含用户指定的 16 个仓库，不擅自替换或扩大。
   `ai-boost/awesome-harness-engineering` 为第三方汇编，不当作项目官方实现。
+- `harness-sources.json` 是额外授权的 Harness 专项定向采集清单，包含精确文件路径及主题，
+  不等于 `ka seed` 默认清单。通过 `scripts/import_harness_sources.py` 显式执行；
+  该脚本合并同来源旧采集路径，避免补采时删除已有覆盖。
+  专项说明见 [HARNESS_KNOWLEDGE.md](HARNESS_KNOWLEDGE.md)；
+  `ka sync` 保留这类来源的定向文件清单，不恢复为普通抽样。
 - GitHub 导入默认用无登录态 Playwright 浏览器读取固定 commit 原文；
   不执行仓库脚本、不使用搜索摘要作正式证据，也不悄悄回退到 API。
 - 默认每库 60 文件、总计 10 MiB、单文件 256 KiB、展开 12 个目录页。
@@ -208,7 +213,8 @@ API 错误、NaN、缺少凭证、超时和限流如实保留。
 
 - `data/knowledge.sqlite3`、`data/snapshots/`、模型目录和 Docker 命名卷是运行数据，
   不是可随手删除的测试文件。停止服务用 `docker compose stop`，不使用删除卷的操作。
-- 保留 `tests/`、`eval/`、`scripts/` 和最新必要验收记录；
+- 保留 `tests/`、`eval/`、`scripts/` 中的可复跑用例、题集和执行代码。
+  2026-11-06 按用户要求清理了所有历史验收原始输出，仅在文档保留指标和失败摘要；
   清理过的旧目录不要重新创建来冒充历史证据。
   记录清单见 [data/acceptance/README.md](data/acceptance/README.md)。
 - 每次真实运行用新输出目录，避免覆盖保留答案和人工复核。

@@ -11,5 +11,8 @@
   {"repo": "milvus-io/milvus", "role": "project"},
   {"repo": "vllm-project/vllm", "role": "project"},
   {"repo": "ai-boost/awesome-harness-engineering", "role": "third_party", "max_file_bytes": 524288},
-  {"repo": "infiniflow/ragflow", "role": "project"}
+  {"repo": "infiniflow/ragflow", "role": "project"},
+  {"repo": "microsoft/agent-framework", "role": "project"},
+  {"repo": "crewAIInc/crewAI", "role": "project"},
+  {"repo": "shareAI-lab/learn-claude-code", "role": "tutorial"}
 ]

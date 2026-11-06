@@ -149,7 +149,7 @@ def test_cli_seed_list_and_help_do_not_require_keys():
     runner = CliRunner()
     result = runner.invoke(app, ["seed", "--list"])
     assert result.exit_code == 0
-    assert len(json.loads(result.stdout)) == 13
+    assert len(json.loads(result.stdout)) == 16
     assert runner.invoke(app, ["chat", "--help"]).exit_code == 0
 
 
