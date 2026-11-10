@@ -1,0 +1,4 @@
+ziroom-mcp @ git+https://github.com/crispyian/playwright_with_ziroom@6ba7e70acab2cc791472e87371525ef573a24ce1
+mcp==2.3.0
+playwright==1.65.0
+Pillow==12.2.0

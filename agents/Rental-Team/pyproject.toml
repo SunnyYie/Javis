@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rental-team"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "javis-tools", "mcp==2.3.0", "jsonschema>=4.23,<5", "pydantic-settings>=2.6,<3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rental_team"]

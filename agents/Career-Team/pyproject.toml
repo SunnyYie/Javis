@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "career-team"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "javis-tools", "langchain>=1,<2", "langchain-openai>=1,<2", "langgraph>=1,<2",
+  "langsmith>=0.14.17,<0.15", "pydantic>=2,<3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/career_team"]

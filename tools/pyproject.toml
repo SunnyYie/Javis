@@ -20,4 +20,4 @@ knowledge-assistant = { path = "../agents/Knowledge-Assistant", editable = true 
 interview-question-bank = { path = "../agents/Interview-Question-Bank", editable = true }
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/javis_tools"]
+packages = ["src/javis_tools", "src/javis_core"]

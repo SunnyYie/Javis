@@ -10,6 +10,7 @@
 *.p12
 *.pfx
 credentials.json
+credentials.json.lock
 credentials.*.json
 service-account*.json
 *cookies*.json
@@ -57,6 +58,7 @@ models/
 
 # Python environments, build products and test output.
 .venv/
+.venv-*/
 venv/
 __pycache__/
 *.py[cod]

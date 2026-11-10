@@ -1,5 +1,11 @@
 # Brain-Leader
 
+新增通用入口 `uv run javis chat`，支持静态 Career/Rental 团队调度。
+`bl` 仍是原求职兼容入口；职业业务已归属 `agents/Career-Team`，旧导入仅转发。
+租房配置与用户确认见 [Rental Team](../agents/Rental-Team/README.md)，
+真实来源未通过项及本轮结果见 [实施与验收](../docs/Javis实施与验收.md)。
+高德公共地点与公交路线接口已真实验证；自如尚未通过，不能视为双来源完整发布。
+
 单用户终端求职 Agent。连接现有三个助手，贯通职业事实、简历版本、岗位匹配、
 有来源的备考、逐轮模拟面试、复盘与确认后的长期记忆。
 

@@ -1,5 +1,11 @@
 # Brain-Leader 调用与维护契约
 
+2026-11-10 架构变更：本文下述职业契约仍适用于 `bl`；
+职业实现已迁到 `../agents/Career-Team/src/career_team`，同名旧模块仅为兼容门面。
+通用 `javis` 使用 `orchestrator.py/javis_cli.py`，只调度团队，不注册职业领域工具。
+新租房与真实验收边界见 [实施记录](../docs/Javis实施与验收.md)。
+本文原有每日一题说明保持不变。
+
 更新日期：2026-11-06。范围：`/Users/sunyi/ai/Agent/Javis/Brain-Leader`。
 
 面向后续维护 Agent、主控集成方和开发者。接口以当前源码为准；
